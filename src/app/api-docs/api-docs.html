@@ -1,0 +1,76 @@
+<div class="container my-5">
+  <div class="text-center mb-5">
+    <h1 class="display-4">{{ apiInfo.title }}</h1>
+    <p class="lead">{{ apiInfo.description }}</p>
+    <p class="text-muted">Versión: {{ apiInfo.version }} | Servidor: {{ apiInfo.server }}</p>
+  </div>
+
+  <h2 class="mb-4 border-bottom pb-2">Endpoints</h2>
+  
+  <div class="accordion" id="apiAccordion">
+    <div class="accordion-item" *ngFor="let endpoint of endpoints; let i = index">
+      <h2 class="accordion-header" [id]="'heading' + i">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i" aria-expanded="false" [attr.aria-controls]="'collapse' + i">
+          <span class="badge me-3" [ngClass]="getMethodClass(endpoint.method)">{{ endpoint.method }}</span>
+          <span class="fw-bold me-2">{{ endpoint.path }}</span>
+          <span class="text-muted small">- {{ endpoint.summary }}</span>
+        </button>
+      </h2>
+      <div [id]="'collapse' + i" class="accordion-collapse collapse" [attr.aria-labelledby]="'heading' + i" data-bs-parent="#apiAccordion">
+        <div class="accordion-body">
+          <p><strong>Descripción:</strong> {{ endpoint.summary }}</p>
+          <p *ngIf="endpoint.security"><strong>Seguridad:</strong> <span class="badge bg-dark ms-2">{{ endpoint.security }}</span></p>
+          
+          <div *ngIf="endpoint.parameters" class="mt-3">
+            <h5>Parámetros</h5>
+            <table class="table table-sm table-bordered">
+              <thead>
+                <tr><th>Nombre</th><th>Ubicación</th><th>Requerido</th><th>Descripción</th></tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let param of endpoint.parameters">
+                  <td>{{ param.name }}</td><td>{{ param.in }}</td><td>{{ param.required ? 'Sí' : 'No' }}</td><td>{{ param.description }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div *ngIf="endpoint.requestBody" class="mt-3">
+            <h5>Cuerpo de la Solicitud</h5>
+            <p>Esquema: <span class="badge bg-info text-dark">{{ endpoint.requestBody }}</span></p>
+          </div>
+
+          <div *ngIf="endpoint.responses" class="mt-3">
+            <h5>Respuestas</h5>
+            <ul class="list-group">
+              <li class="list-group-item" *ngFor="let response of endpoint.responses | keyvalue">
+                <span class="badge bg-secondary me-2">{{ response.key }}</span> {{ response.value }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="mt-5 mb-4 border-bottom pb-2">Modelos (Schemas)</h2>
+  <div class="row row-cols-1 row-cols-md-2 g-4">
+    <div class="col" *ngFor="let schema of schemas">
+      <div class="card h-100 shadow-sm">
+        <div class="card-header bg-light fw-bold">{{ schema.name }}</div>
+        <div class="card-body">
+          <table class="table table-sm table-hover">
+            <thead><tr><th>Propiedad</th><th>Tipo</th><th>Detalles</th></tr></thead>
+            <tbody>
+              <tr *ngFor="let prop of schema.properties">
+                <td>{{ prop.name }}</td>
+                <td><code>{{ prop.type }}</code></td>
+                <td><span *ngIf="prop.enum" class="text-muted small">[{{ prop.enum.join(', ') }}]</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

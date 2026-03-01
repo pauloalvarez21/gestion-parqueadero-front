@@ -1,0 +1,11 @@
+.login-container {
+  min-height: 100vh;
+  /* Reemplaza el degradado por tu imagen */
+  background: url('/images/fondo.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+}
