@@ -38,7 +38,7 @@ export class LoginComponent {
             this.isLoading = false;
             if (response.token) {
               localStorage.setItem('token', response.token);
-              this.router.navigate(['/docs']); // Redirige a la documentación tras el login
+              this.router.navigate(['/home']); // Redirige al home tras el login
             }
           },
           error: (error) => {

@@ -1,0 +1,13 @@
+.space-card {
+    transition: transform 0.2s;
+    background-color: #f8f9fa; /* Gris muy claro para disponibles */
+}
+
+.space-card:hover {
+    transform: translateY(-3px);
+}
+
+.space-card.occupied {
+    background-color: #fff5f5; /* Rojo muy claro para ocupados */
+    border: 1px solid #ffcccc !important;
+}

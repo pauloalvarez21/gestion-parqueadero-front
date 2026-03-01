@@ -1,0 +1,82 @@
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold text-dark">Espacios de Parqueo</h2>
+      <p class="text-muted">Gestiona la disponibilidad y crea nuevos espacios.</p>
+    </div>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSpaceModal">
+      <i class="bi bi-plus-lg me-2"></i>Agregar Espacios
+    </button>
+  </div>
+
+  <!-- Mensaje de Error -->
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorMessage }}
+  </div>
+
+  <!-- Indicador de Carga -->
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div>
+  </div>
+
+  <!-- Grid de Espacios -->
+  <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-3">
+    <div class="col" *ngFor="let space of spaces">
+      <div class="card h-100 border-0 shadow-sm space-card" [class.occupied]="space.estado === 'OCUPADO'">
+        <div class="card-body text-center">
+          <div class="mb-2">
+            <i class="bi fs-1" 
+               [ngClass]="{
+                 'bi-car-front-fill': space.tipoVehiculo === 'CARRO',
+                 'bi-bicycle': space.tipoVehiculo === 'MOTO' || space.tipoVehiculo === 'BICICLETA'
+               }"></i>
+          </div>
+          <h6 class="card-title fw-bold mb-1">{{ space.codigo }}</h6>
+          <span class="badge rounded-pill" 
+                [ngClass]="space.estado === 'DISPONIBLE' ? 'text-bg-success' : 'text-bg-danger'">
+            {{ space.estado }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estado vacío -->
+  <div *ngIf="spaces.length === 0 && !isLoading" class="text-center py-5 text-muted">
+    <i class="bi bi-p-circle fs-1 d-block mb-3"></i>
+    <p>No hay espacios registrados aún.</p>
+  </div>
+</div>
+
+<!-- Modal para Agregar Espacios -->
+<div class="modal fade" id="addSpaceModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold">Agregar Nuevos Espacios</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="createSpaces()">
+          <div class="mb-3">
+            <label class="form-label">Tipo de Vehículo</label>
+            <select class="form-select" [(ngModel)]="newSpace.tipoVehiculo" name="tipoVehiculo">
+              <option value="CARRO">Carro</option>
+              <option value="MOTO">Moto</option>
+              <option value="BICICLETA">Bicicleta</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Cantidad a crear</label>
+            <input type="number" class="form-control" [(ngModel)]="newSpace.cantidad" name="cantidad" min="1">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Tarifa Base</label>
+            <input type="number" class="form-control" [(ngModel)]="newSpace.tarifaBase" name="tarifaBase">
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Generar Espacios</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

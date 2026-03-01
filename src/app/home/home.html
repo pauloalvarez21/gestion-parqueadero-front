@@ -1,0 +1,27 @@
+<div class="container py-5">
+  <div class="row mb-5 text-center">
+    <div class="col-lg-8 mx-auto">
+      <h1 class="display-5 fw-bold text-dark">Panel de Control</h1>
+      <p class="lead text-muted">Bienvenido al sistema de gestión. Seleccione una opción para comenzar.</p>
+    </div>
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div class="col" *ngFor="let action of actions">
+      <!-- Tarjeta interactiva -->
+      <div class="card h-100 shadow-sm border-0 hover-card" [routerLink]="action.link" style="cursor: pointer;">
+        <div class="card-body text-center p-4">
+          <div class="mb-3">
+            <i class="bi {{ action.icon }} fs-1" [ngClass]="action.color"></i>
+          </div>
+          <h5 class="card-title fw-bold">{{ action.title }}</h5>
+          <p class="card-text text-muted small">{{ action.description }}</p>
+        </div>
+        <div class="card-footer bg-transparent border-0 pb-3">
+          <button class="btn btn-outline-primary btn-sm w-100 rounded-pill">Acceder</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
