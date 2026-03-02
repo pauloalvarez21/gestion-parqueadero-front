@@ -16,21 +16,21 @@ export class HomeComponent {
       title: 'Registrar Entrada', 
       icon: 'bi-box-arrow-in-right', 
       description: 'Registrar el ingreso de un vehículo al parqueadero.', 
-      link: '/entrada',
+      link: '/entry',
       color: 'text-success'
     },
     { 
       title: 'Registrar Salida', 
       icon: 'bi-box-arrow-left', 
       description: 'Procesar la salida de un vehículo y calcular pago.', 
-      link: '/salida',
+      link: '/exit',
       color: 'text-danger'
     },
     { 
       title: 'Crear Usuario', 
       icon: 'bi-person-plus-fill', 
       description: 'Registrar un nuevo operador o administrador.', 
-      link: '/registro-usuario',
+      link: '/registration',
       color: 'text-primary'
     },
     { 
@@ -44,7 +44,7 @@ export class HomeComponent {
       title: 'Tarifas', 
       icon: 'bi-currency-dollar', 
       description: 'Configurar los precios por minuto, hora o día.', 
-      link: '/tarifas',
+      link: '/tariffs',
       color: 'text-warning'
     },
     { 

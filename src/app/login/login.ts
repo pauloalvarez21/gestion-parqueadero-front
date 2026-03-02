@@ -5,6 +5,10 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment.development';
 
+interface LoginResponse {
+  token: string;
+}
+
 declare var bootstrap: any;
 
 @Component({
@@ -33,26 +37,39 @@ export class LoginComponent {
       this.errorMessage = '';
       const credentials = this.loginForm.value;
 
-      this.http.post<any>(`${environment.baseUrl}/auth/login`, credentials).subscribe({
+      console.log('Enviando solicitud de login a:', `${environment.baseUrl}/auth/login`, credentials);
+
+      this.http.post<LoginResponse>(`${environment.baseUrl}/auth/login`, credentials).subscribe({
         next: (response) => {
           this.isLoading = false;
-          if (response.token) {
+          if (response && response.token) {
             localStorage.setItem('token', response.token);
             this.router.navigate(['/home']); // Redirige al home tras el login
+          } else {
+            this.errorMessage = 'Error: No se recibió el token de autenticación.';
           }
         },
         error: (error) => {
           this.isLoading = false;
-          // 1. Extraer el mensaje del backend (ej: "Usuario o contraseña incorrectos")
-          this.errorMessage = error.error?.message || 'Ocurrió un error inesperado';
           console.error('Error de login:', error);
 
-          // 2. Limpiar los inputs y el botón (reseteando el formulario)
-          this.loginForm.reset();
+          // 1. Mejor manejo de errores para diagnóstico
+          if (error.status === 0) {
+            this.errorMessage = 'Error de conexión. Verifique si el backend está corriendo y si CORS está habilitado.';
+          } else if (error.status === 401) {
+            this.errorMessage = 'Usuario o contraseña incorrectos.';
+          } else if (error.status === 403) {
+            this.errorMessage = 'Error 403: Acceso denegado. Verifique la configuración de CORS o CSRF en el backend.';
+          } else {
+            this.errorMessage = error.error?.message || 'Ocurrió un error inesperado';
+          }
+
+          // 2. Limpiar solo la contraseña para no obligar a reescribir el usuario
+          this.loginForm.get('password')?.reset();
 
           // 3. Mostrar el popup (Modal de Bootstrap)
           const modalElement = document.getElementById('errorModal');
-          if (modalElement) {
+          if (modalElement && typeof bootstrap !== 'undefined') {
             const modal = new bootstrap.Modal(modalElement);
             modal.show();
           }

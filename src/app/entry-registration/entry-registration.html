@@ -1,0 +1,93 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      
+      <!-- Tarjeta del Formulario -->
+      <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h3 class="mb-0"><i class="bi bi-box-arrow-in-right me-2"></i>Registrar Entrada</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="entryForm" (ngSubmit)="onSubmit()">
+            
+            <!-- Campo Placa -->
+            <div class="mb-3">
+              <label for="placa" class="form-label">Placa del Vehículo</label>
+              <input type="text" id="placa" class="form-control form-control-lg text-uppercase" 
+                     formControlName="placa" placeholder="Ej: ABC-123"
+                     [class.is-invalid]="entryForm.get('placa')?.invalid && entryForm.get('placa')?.touched">
+              <div class="invalid-feedback">
+                La placa es requerida.
+              </div>
+            </div>
+
+            <!-- Campo Tipo Vehículo -->
+            <div class="mb-3">
+              <label for="tipoVehiculo" class="form-label">Tipo de Vehículo</label>
+              <select id="tipoVehiculo" class="form-select" formControlName="tipoVehiculo">
+                <option *ngFor="let type of vehicleTypes" [value]="type">{{ type }}</option>
+              </select>
+            </div>
+
+            <!-- Campo Tipo Tarifa -->
+            <div class="mb-3">
+              <label for="tipoTarifa" class="form-label">Tipo de Tarifa</label>
+              <select id="tipoTarifa" class="form-select" formControlName="tipoTarifa">
+                <option *ngFor="let type of tariffTypes" [value]="type">{{ type.replace('_', ' ') }}</option>
+              </select>
+            </div>
+
+            <!-- Botón Submit -->
+            <div class="d-grid gap-2 mt-4">
+              <button type="submit" class="btn btn-success btn-lg" [disabled]="isLoading || entryForm.invalid">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                {{ isLoading ? 'Procesando...' : 'Registrar Ingreso' }}
+              </button>
+            </div>
+
+            <!-- Mensaje de Error -->
+            <div *ngIf="errorMessage" class="alert alert-danger mt-3 d-flex align-items-center" role="alert">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              <div>{{ errorMessage }}</div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+      <!-- Tarjeta de Resultado (Ticket) -->
+      <div *ngIf="ticket" class="card mt-4 border-success shadow-sm animate-fade-in">
+        <div class="card-header bg-transparent border-success text-success fw-bold">
+          <i class="bi bi-check-circle-fill me-2"></i>Entrada Registrada Exitosamente
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-6">
+              <small class="text-muted">Código Ticket</small>
+              <h4 class="text-primary">{{ ticket.codigo }}</h4>
+            </div>
+            <div class="col-6 text-end">
+              <small class="text-muted">Espacio Asignado</small>
+              <h4>{{ ticket.codigoEspacio }}</h4>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-6">
+              <strong>Placa:</strong> {{ ticket.placa }}<br>
+              <strong>Vehículo:</strong> {{ ticket.tipoVehiculo }}
+            </div>
+            <div class="col-6 text-end">
+              <strong>Hora:</strong> {{ ticket.horaEntrada | date:'shortTime' }}<br>
+              <strong>Fecha:</strong> {{ ticket.horaEntrada | date:'mediumDate' }}
+            </div>
+          </div>
+        </div>
+        <div class="card-footer bg-light text-center">
+          <button class="btn btn-outline-secondary btn-sm" (click)="ticket = null">Nuevo Registro</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
