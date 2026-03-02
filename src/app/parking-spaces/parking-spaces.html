@@ -4,9 +4,14 @@
       <h2 class="fw-bold text-dark">Espacios de Parqueo</h2>
       <p class="text-muted">Gestiona la disponibilidad y crea nuevos espacios.</p>
     </div>
-    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSpaceModal">
-      <i class="bi bi-plus-lg me-2"></i>Agregar Espacios
-    </button>
+    <div>
+      <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addSpaceModal">
+        <i class="bi bi-plus-lg me-2"></i>Agregar Espacios
+      </button>
+      <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteSpaceModal">
+        <i class="bi bi-trash me-2"></i>Eliminar Espacios
+      </button>
+    </div>
   </div>
 
   <!-- Mensaje de Error -->
@@ -16,24 +21,35 @@
 
   <!-- Indicador de Carga -->
   <div *ngIf="isLoading" class="text-center py-5">
-    <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div>
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
   </div>
 
   <!-- Grid de Espacios -->
   <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-3">
     <div class="col" *ngFor="let space of spaces">
-      <div class="card h-100 border-0 shadow-sm space-card" [class.occupied]="space.estado === 'OCUPADO'">
+      <div
+        class="card h-100 border-0 shadow-sm space-card"
+        [class.occupied]="space.estado === 'OCUPADO'"
+      >
         <div class="card-body text-center">
           <div class="mb-2">
-            <i class="bi fs-1" 
-               [ngClass]="{
-                 'bi-car-front-fill': space.tipoVehiculo === 'CARRO',
-                 'bi-bicycle': space.tipoVehiculo === 'MOTO' || space.tipoVehiculo === 'BICICLETA'
-               }"></i>
+            <i
+              class="bi fs-1"
+              [ngClass]="{
+                'bi-car-front-fill': space.tipoVehiculo === 'CARRO',
+                'bi-scooter': space.tipoVehiculo === 'MOTO',
+                'bi-bicycle': space.tipoVehiculo === 'BICICLETA',
+              }"
+            ></i>
           </div>
           <h6 class="card-title fw-bold mb-1">{{ space.codigo }}</h6>
-          <span class="badge rounded-pill" 
-                [ngClass]="space.estado === 'DISPONIBLE' ? 'text-bg-success' : 'text-bg-danger'">
+          <p class="card-text small text-muted mb-2">{{ space.tipoVehiculo }}</p>
+          <span
+            class="badge rounded-pill"
+            [ngClass]="space.estado === 'DISPONIBLE' ? 'text-bg-success' : 'text-bg-danger'"
+          >
             {{ space.estado }}
           </span>
         </div>
@@ -68,13 +84,67 @@
           </div>
           <div class="mb-3">
             <label class="form-label">Cantidad a crear</label>
-            <input type="number" class="form-control" [(ngModel)]="newSpace.cantidad" name="cantidad" min="1">
+            <input
+              type="number"
+              class="form-control"
+              [(ngModel)]="newSpace.cantidad"
+              name="cantidad"
+              min="1"
+            />
           </div>
           <div class="mb-3">
             <label class="form-label">Tarifa Base</label>
-            <input type="number" class="form-control" [(ngModel)]="newSpace.tarifaBase" name="tarifaBase">
+            <input
+              type="number"
+              class="form-control"
+              [(ngModel)]="newSpace.tarifaBase"
+              name="tarifaBase"
+            />
           </div>
           <button type="submit" class="btn btn-primary w-100">Generar Espacios</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para Eliminar Espacios -->
+<div class="modal fade" id="deleteSpaceModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold">Eliminar Espacios Disponibles</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted small">
+          Selecciona el tipo de vehículo y la cantidad de espacios <strong>disponibles</strong> que
+          deseas eliminar. Esta acción no se puede deshacer.
+        </p>
+        <form (ngSubmit)="deleteSpaces()">
+          <div class="mb-3">
+            <label class="form-label">Tipo de Vehículo</label>
+            <select
+              class="form-select"
+              [(ngModel)]="deleteRequest.tipoVehiculo"
+              name="deleteTipoVehiculo"
+            >
+              <option value="CARRO">Carro</option>
+              <option value="MOTO">Moto</option>
+              <option value="BICICLETA">Bicicleta</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Cantidad a Eliminar</label>
+            <input
+              type="number"
+              class="form-control"
+              [(ngModel)]="deleteRequest.cantidad"
+              name="deleteCantidad"
+              min="1"
+            />
+          </div>
+          <button type="submit" class="btn btn-danger w-100">Eliminar Espacios</button>
         </form>
       </div>
     </div>
