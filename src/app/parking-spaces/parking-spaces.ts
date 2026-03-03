@@ -6,6 +6,15 @@ import { environment } from '../../environments/environment.development';
 
 declare var bootstrap: any;
 
+export interface Espacio {
+  id: number;
+  codigo: string;
+  tipoVehiculoPermitido: string;
+  estado: string;
+  tarifaBase: number;
+  ocupado: boolean;
+}
+
 @Component({
   selector: 'app-parking-spaces',
   standalone: true,
@@ -17,7 +26,8 @@ export class ParkingSpacesComponent implements OnInit {
   private readonly http: HttpClient = inject(HttpClient);
   private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
-  spaces: any[] = [];
+  spaces: Espacio[] = [];
+  selectedSpace: Espacio | null = null;
   isLoading = false;
   errorMessage = '';
 
@@ -43,7 +53,7 @@ export class ParkingSpacesComponent implements OnInit {
     this.errorMessage = '';
     console.log('Iniciando petición a /api/parqueadero/espacios...');
 
-    this.http.get<any[]>(`${environment.baseUrl}/parqueadero/espacios`).subscribe({
+    this.http.get<Espacio[]>(`${environment.baseUrl}/parqueadero/espacios`).subscribe({
       next: (data) => {
         console.log('Datos recibidos del backend:', data);
         this.spaces = data;
@@ -98,5 +108,9 @@ export class ParkingSpacesComponent implements OnInit {
         console.error('Error deleting spaces:', err);
       },
     });
+  }
+
+  showSpaceDetails(space: Espacio) {
+    this.selectedSpace = space;
   }
 }

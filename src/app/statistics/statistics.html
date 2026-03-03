@@ -1,0 +1,95 @@
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold text-dark">Estadísticas del Parqueadero</h2>
+      <p class="text-muted">Resumen de la actividad y los ingresos.</p>
+    </div>
+    <button class="btn btn-outline-primary" (click)="loadStatistics()" [disabled]="isLoading">
+      <i
+        class="bi"
+        [class.bi-arrow-clockwise]="!isLoading"
+        [class.spinner-border]="isLoading"
+        [class.spinner-border-sm]="isLoading"
+      ></i>
+      <span *ngIf="!isLoading"> Actualizar</span>
+      <span *ngIf="isLoading"> Cargando...</span>
+    </button>
+  </div>
+
+  <!-- Mensaje de Error -->
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorMessage }}
+  </div>
+
+  <!-- Indicador de Carga -->
+  <div *ngIf="isLoading && !stats" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando estadísticas...</p>
+  </div>
+
+  <!-- Contenido de Estadísticas -->
+  <div *ngIf="stats && !errorMessage">
+    <!-- Fila 1: Ocupación -->
+    <div class="row g-4 mb-4">
+      <div class="col-md-4">
+        <div class="card text-center shadow-sm h-100">
+          <div class="card-body">
+            <i class="bi bi-car-front-fill fs-1 text-primary"></i>
+            <h3 class="card-title fw-bold mt-2">{{ stats.vehiculosActivos }}</h3>
+            <p class="card-text text-muted">Vehículos Activos</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-center shadow-sm h-100">
+          <div class="card-body">
+            <i class="bi bi-p-circle-fill fs-1 text-success"></i>
+            <h3 class="card-title fw-bold mt-2">{{ stats.espaciosDisponibles }}</h3>
+            <p class="card-text text-muted">Espacios Disponibles</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-center shadow-sm h-100">
+          <div class="card-body">
+            <i class="bi bi-p-circle fs-1 text-danger"></i>
+            <h3 class="card-title fw-bold mt-2">{{ stats.espaciosOcupados }}</h3>
+            <p class="card-text text-muted">Espacios Ocupados</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fila 2: Ingresos -->
+    <div class="row g-4 mb-4">
+      <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+          <div class="card-body d-flex align-items-center">
+            <i class="bi bi-cash-coin fs-1 text-success me-4"></i>
+            <div>
+              <h4 class="fw-bold">
+                {{ stats.ingresosHoy | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
+              </h4>
+              <p class="mb-0 text-muted">Ingresos de Hoy</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+          <div class="card-body d-flex align-items-center">
+            <i class="bi bi-calendar-month fs-1 text-info me-4"></i>
+            <div>
+              <h4 class="fw-bold">
+                {{ stats.ingresosMes | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
+              </h4>
+              <p class="mb-0 text-muted">Ingresos del Mes</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

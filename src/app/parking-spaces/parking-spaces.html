@@ -32,23 +32,25 @@
       <div
         class="card h-100 border-0 shadow-sm space-card"
         [class.occupied]="space.estado === 'OCUPADO'"
+        (click)="showSpaceDetails(space)"
+        data-bs-toggle="modal"
+        data-bs-target="#spaceDetailsModal"
       >
         <div class="card-body text-center">
           <div class="mb-2">
             <i
               class="bi fs-1"
-              [ngClass]="{
-                'bi-car-front-fill': space.tipoVehiculo === 'CARRO',
-                'bi-scooter': space.tipoVehiculo === 'MOTO',
-                'bi-bicycle': space.tipoVehiculo === 'BICICLETA',
-              }"
+              [class.bi-car-front-fill]="space.tipoVehiculoPermitido === 'CARRO'"
+              [class.bi-scooter]="space.tipoVehiculoPermitido === 'MOTO'"
+              [class.bi-bicycle]="space.tipoVehiculoPermitido === 'BICICLETA'"
             ></i>
           </div>
           <h6 class="card-title fw-bold mb-1">{{ space.codigo }}</h6>
-          <p class="card-text small text-muted mb-2">{{ space.tipoVehiculo }}</p>
+          <p class="card-text small text-muted mb-2">{{ space.tipoVehiculoPermitido }}</p>
           <span
             class="badge rounded-pill"
-            [ngClass]="space.estado === 'DISPONIBLE' ? 'text-bg-success' : 'text-bg-danger'"
+            [class.text-bg-success]="space.estado === 'DISPONIBLE'"
+            [class.text-bg-danger]="space.estado === 'OCUPADO'"
           >
             {{ space.estado }}
           </span>
@@ -61,6 +63,56 @@
   <div *ngIf="spaces.length === 0 && !isLoading" class="text-center py-5 text-muted">
     <i class="bi bi-p-circle fs-1 d-block mb-3"></i>
     <p>No hay espacios registrados aún.</p>
+  </div>
+</div>
+
+<!-- Modal para Detalles del Espacio -->
+<div
+  class="modal fade"
+  id="spaceDetailsModal"
+  tabindex="-1"
+  aria-labelledby="spaceDetailsModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" *ngIf="selectedSpace">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="spaceDetailsModalLabel">
+          Detalles del Espacio: {{ selectedSpace.codigo }}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            ID del Espacio:
+            <span class="fw-bold">{{ selectedSpace.id }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Tipo de Vehículo:
+            <span class="badge bg-secondary">{{ selectedSpace.tipoVehiculoPermitido }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Estado:
+            <span
+              class="badge"
+              [class.text-bg-success]="selectedSpace.estado === 'DISPONIBLE'"
+              [class.text-bg-danger]="selectedSpace.estado === 'OCUPADO'"
+              >{{ selectedSpace.estado }}</span
+            >
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Tarifa Base:
+            <span class="fw-bold text-success">{{
+              selectedSpace.tarifaBase | currency: 'USD' : 'symbol' : '1.0-0'
+            }}</span>
+          </li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
   </div>
 </div>
 

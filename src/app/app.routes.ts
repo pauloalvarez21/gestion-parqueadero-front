@@ -7,6 +7,9 @@ import { EntryRegistrationComponent } from './entry-registration/entry-registrat
 import { ExitRegistrationComponent } from './exit-registration/exit-registration';
 import { UserRegistrationComponent } from './user-registration/user-registration';
 import { TariffManagementComponent } from './tariff-management/tariff-management';
+import { StatisticsComponent } from './statistics/statistics';
+import { ActiveTicketsComponent } from './active-tickets/active-tickets';
+import { VehiclesComponent } from './active-tickets/vehicles';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -17,5 +20,8 @@ export const routes: Routes = [
   { path: 'exit', component: ExitRegistrationComponent },
   { path: 'registration', component: UserRegistrationComponent },
   { path: 'tariffs', component: TariffManagementComponent },
-  { path: '', redirectTo: '/login', pathMatch: 'full' }
+  { path: 'statistics', component: StatisticsComponent },
+  { path: 'tickets', component: ActiveTicketsComponent },
+  { path: 'vehicles', component: VehiclesComponent },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
 ];
