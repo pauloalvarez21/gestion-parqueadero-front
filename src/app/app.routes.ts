@@ -4,12 +4,12 @@ import { LoginComponent } from './login/login';
 import { HomeComponent } from './home/home';
 import { ParkingSpacesComponent } from './parking-spaces/parking-spaces';
 import { EntryRegistrationComponent } from './entry-registration/entry-registration';
-import { ExitRegistrationComponent } from './exit-registration/exit-registration';
 import { UserRegistrationComponent } from './user-registration/user-registration';
 import { TariffManagementComponent } from './tariff-management/tariff-management';
 import { StatisticsComponent } from './statistics/statistics';
 import { ActiveTicketsComponent } from './active-tickets/active-tickets';
 import { VehiclesComponent } from './active-tickets/vehicles';
+import { ExitRegistrationComponent } from './exit/exit';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },

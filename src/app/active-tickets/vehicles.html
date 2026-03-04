@@ -1,60 +1,131 @@
 <div class="container py-5">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-      <h2 class="fw-bold text-dark">Directorio de Vehículos</h2>
-      <p class="text-muted">Información de vehículos y propietarios registrados.</p>
+      <h2 class="fw-bold text-dark">Gestión de Vehículos</h2>
+      <p class="text-muted">Busca, visualiza y registra nuevos vehículos.</p>
+    </div>
+    <div>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addVehicleModal">
+        <i class="bi bi-plus-lg me-2"></i>Registrar Vehículo
+      </button>
     </div>
   </div>
 
-  <!-- Buscador -->
-  <div class="card shadow-sm mb-4">
-    <div class="card-body">
-      <div class="input-group">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Buscar por placa..."
-          [(ngModel)]="searchPlaca"
-          (keyup.enter)="loadVehicles()"
-        />
-        <button class="btn btn-primary" type="button" (click)="loadVehicles()">
-          <i class="bi bi-search"></i> Buscar
-        </button>
-      </div>
+  <!-- Barra de Búsqueda -->
+  <div class="mb-4">
+    <div class="input-group">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input
+        type="text"
+        class="form-control text-uppercase"
+        placeholder="Buscar por placa..."
+        [ngModel]="searchPlaca"
+        (ngModelChange)="searchPlaca = $event?.toUpperCase(); loadVehicles()"
+      />
     </div>
   </div>
 
-  <!-- Tabla -->
-  <div class="card shadow-sm">
+  <!-- Mensaje de Error -->
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorMessage }}
+  </div>
+
+  <!-- Mensaje de Éxito -->
+  <div *ngIf="successMessage" class="alert alert-success" role="alert">
+    <i class="bi bi-check-circle-fill me-2"></i> {{ successMessage }}
+  </div>
+
+  <!-- Indicador de Carga -->
+  <div *ngIf="isLoading && vehicles.length === 0" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <!-- Tabla de Vehículos -->
+  <div *ngIf="vehicles.length > 0" class="card shadow-sm">
     <div class="table-responsive">
-      <table class="table table-hover align-middle mb-0">
+      <table class="table table-hover table-striped mb-0">
         <thead class="table-light">
           <tr>
-            <th>Placa</th>
-            <th>Tipo</th>
-            <th>Marca/Modelo</th>
-            <th>Propietario</th>
-            <th>Contacto</th>
+            <th scope="col">Placa</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Marca</th>
+            <th scope="col">Modelo</th>
+            <th scope="col">Propietario</th>
+            <th scope="col">Teléfono</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let v of vehicles">
-            <td class="fw-bold">{{ v.placa }}</td>
-            <td>
-              <span class="badge bg-secondary">{{ v.tipo }}</span>
-            </td>
-            <td>
-              {{ v.marca }} {{ v.modelo }}
-              <span *ngIf="v.color" class="text-muted">({{ v.color }})</span>
-            </td>
-            <td>{{ v.nombrePropietario || 'N/A' }}</td>
-            <td>{{ v.telefonoPropietario || 'N/A' }}</td>
-          </tr>
-          <tr *ngIf="vehicles.length === 0 && !isLoading">
-            <td colspan="5" class="text-center py-4 text-muted">No se encontraron vehículos.</td>
+          <tr *ngFor="let vehicle of vehicles">
+            <td class="fw-bold">{{ vehicle.placa }}</td>
+            <td>{{ vehicle.tipo }}</td>
+            <td>{{ vehicle.marca || 'N/A' }}</td>
+            <td>{{ vehicle.modelo || 'N/A' }}</td>
+            <td>{{ vehicle.nombrePropietario || 'N/A' }}</td>
+            <td>{{ vehicle.telefonoPropietario || 'N/A' }}</td>
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- Estado vacío -->
+  <div *ngIf="!isLoading && vehicles.length === 0 && !errorMessage" class="text-center py-5 text-muted">
+    <i class="bi bi-car-front fs-1 d-block mb-3"></i>
+    <p>No se encontraron vehículos. ¡Registra el primero!</p>
+  </div>
+</div>
+
+<!-- Modal para Agregar Vehículo -->
+<div class="modal fade" id="addVehicleModal" tabindex="-1" aria-labelledby="addVehicleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="addVehicleModalLabel">Registrar Nuevo Vehículo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="addVehicle()">
+          <div class="mb-3">
+            <label for="placa" class="form-label">Placa</label>
+            <input type="text"
+                   class="form-control text-uppercase"
+                   id="placa"
+                   name="placa"
+                   [ngModel]="newVehicle.placa"
+                   (ngModelChange)="newVehicle.placa = $event?.toUpperCase()" required />
+          </div>
+          <div class="mb-3">
+            <label for="tipo" class="form-label">Tipo de Vehículo</label>
+            <select class="form-select" id="tipo" name="tipo" [(ngModel)]="newVehicle.tipo">
+              <option value="CARRO">Carro</option>
+              <option value="MOTO">Moto</option>
+              <option value="BICICLETA">Bicicleta</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="marca" class="form-label">Marca (Opcional)</label>
+            <input type="text" class="form-control" id="marca" name="marca" [(ngModel)]="newVehicle.marca" />
+          </div>
+          <div class="mb-3">
+            <label for="modelo" class="form-label">Modelo (Opcional)</label>
+            <input type="text" class="form-control" id="modelo" name="modelo" [(ngModel)]="newVehicle.modelo" />
+          </div>
+          <div class="mb-3">
+            <label for="nombrePropietario" class="form-label">Propietario (Opcional)</label>
+            <input type="text" class="form-control" id="nombrePropietario" name="nombrePropietario" [(ngModel)]="newVehicle.nombrePropietario" />
+          </div>
+          <div class="mb-3">
+            <label for="telefonoPropietario" class="form-label">Teléfono (Opcional)</label>
+            <input type="text" class="form-control" id="telefonoPropietario" name="telefonoPropietario" [(ngModel)]="newVehicle.telefonoPropietario" />
+          </div>
+          <button type="submit" class="btn btn-primary w-100" [disabled]="isLoading">
+            <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span *ngIf="!isLoading">Registrar</span>
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 </div>

@@ -2,94 +2,120 @@
   <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
       <h2 class="fw-bold text-dark">Estadísticas del Parqueadero</h2>
-      <p class="text-muted">Resumen de la actividad y los ingresos.</p>
+      <p class="text-muted">Resumen de ocupación e ingresos en tiempo real.</p>
     </div>
     <button class="btn btn-outline-primary" (click)="loadStatistics()" [disabled]="isLoading">
-      <i
-        class="bi"
-        [class.bi-arrow-clockwise]="!isLoading"
-        [class.spinner-border]="isLoading"
-        [class.spinner-border-sm]="isLoading"
-      ></i>
-      <span *ngIf="!isLoading"> Actualizar</span>
-      <span *ngIf="isLoading"> Cargando...</span>
+      <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      <i *ngIf="!isLoading" class="bi bi-arrow-clockwise"></i>
+      {{ isLoading ? 'Actualizando...' : 'Actualizar' }}
     </button>
   </div>
 
-  <!-- Mensaje de Error -->
-  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
-    <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorMessage }}
-  </div>
-
-  <!-- Indicador de Carga -->
+  <!-- Loading -->
   <div *ngIf="isLoading && !stats" class="text-center py-5">
-    <div class="spinner-border text-primary" role="status">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
       <span class="visually-hidden">Cargando...</span>
     </div>
-    <p class="mt-2">Cargando estadísticas...</p>
+    <p class="mt-3 text-muted">Cargando datos...</p>
   </div>
 
-  <!-- Contenido de Estadísticas -->
-  <div *ngIf="stats && !errorMessage">
-    <!-- Fila 1: Ocupación -->
-    <div class="row g-4 mb-4">
-      <div class="col-md-4">
-        <div class="card text-center shadow-sm h-100">
-          <div class="card-body">
-            <i class="bi bi-car-front-fill fs-1 text-primary"></i>
-            <h3 class="card-title fw-bold mt-2">{{ stats.vehiculosActivos }}</h3>
-            <p class="card-text text-muted">Vehículos Activos</p>
+  <!-- Error -->
+  <div *ngIf="errorMessage" class="alert alert-danger d-flex align-items-center" role="alert">
+    <i class="bi bi-exclamation-triangle-fill me-3 fs-4"></i>
+    <div>
+      <h5 class="alert-heading">Error</h5>
+      <p class="mb-0">{{ errorMessage }}</p>
+    </div>
+  </div>
+
+  <!-- Dashboard Grid -->
+  <div *ngIf="stats && !errorMessage" class="row g-4">
+
+    <!-- Ocupación -->
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+          <h5 class="card-title text-muted mb-3">Ocupación Actual</h5>
+          <div class="d-flex justify-content-between align-items-baseline mb-2">
+            <span class="fw-bold fs-3 text-primary">{{ stats.espaciosOcupados }} Ocupados</span>
+            <span class="text-muted">{{ getTotalSpaces() }} Espacios Totales</span>
           </div>
+          <div class="progress" style="height: 25px;">
+            <div
+              class="progress-bar progress-bar-striped progress-bar-animated"
+              role="progressbar"
+              [style.width.%]="getOccupationPercentage()"
+              [attr.aria-valuenow]="getOccupationPercentage()"
+              aria-valuemin="0"
+              aria-valuemax="100">
+              <strong>{{ getOccupationPercentage() | number:'1.0-0' }}%</strong>
+            </div>
+          </div>
+           <div class="d-flex justify-content-between mt-2">
+              <small class="text-muted">{{ stats.espaciosDisponibles }} Libres</small>
+           </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card text-center shadow-sm h-100">
-          <div class="card-body">
-            <i class="bi bi-p-circle-fill fs-1 text-success"></i>
-            <h3 class="card-title fw-bold mt-2">{{ stats.espaciosDisponibles }}</h3>
-            <p class="card-text text-muted">Espacios Disponibles</p>
+    </div>
+
+    <!-- Ingresos Hoy -->
+    <div class="col-md-6">
+      <div class="card shadow-sm border-start border-4 border-success h-100">
+        <div class="card-body d-flex align-items-center p-4">
+          <div class="flex-grow-1">
+            <h6 class="text-uppercase text-muted mb-2">Ingresos del Día</h6>
+            <h3 class="fw-bold text-success mb-0">{{ stats.ingresosHoy | currency:'COP':'symbol-narrow':'1.0-0' }}</h3>
           </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card text-center shadow-sm h-100">
-          <div class="card-body">
-            <i class="bi bi-p-circle fs-1 text-danger"></i>
-            <h3 class="card-title fw-bold mt-2">{{ stats.espaciosOcupados }}</h3>
-            <p class="card-text text-muted">Espacios Ocupados</p>
+          <div class="fs-1 text-success opacity-25">
+            <i class="bi bi-cash-coin"></i>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Fila 2: Ingresos -->
-    <div class="row g-4 mb-4">
-      <div class="col-md-6">
-        <div class="card shadow-sm h-100">
-          <div class="card-body d-flex align-items-center">
-            <i class="bi bi-cash-coin fs-1 text-success me-4"></i>
-            <div>
-              <h4 class="fw-bold">
-                {{ stats.ingresosHoy | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
-              </h4>
-              <p class="mb-0 text-muted">Ingresos de Hoy</p>
-            </div>
+    <!-- Ingresos Mes -->
+    <div class="col-md-6">
+      <div class="card shadow-sm border-start border-4 border-primary h-100">
+        <div class="card-body d-flex align-items-center p-4">
+          <div class="flex-grow-1">
+            <h6 class="text-uppercase text-muted mb-2">Ingresos del Mes</h6>
+            <h3 class="fw-bold text-primary mb-0">{{ stats.ingresosMes | currency:'COP':'symbol-narrow':'1.0-0' }}</h3>
           </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card shadow-sm h-100">
-          <div class="card-body d-flex align-items-center">
-            <i class="bi bi-calendar-month fs-1 text-info me-4"></i>
-            <div>
-              <h4 class="fw-bold">
-                {{ stats.ingresosMes | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
-              </h4>
-              <p class="mb-0 text-muted">Ingresos del Mes</p>
-            </div>
+          <div class="fs-1 text-primary opacity-25">
+            <i class="bi bi-calendar-check"></i>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Tickets Hoy -->
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body d-flex align-items-center p-4">
+            <div class="fs-2 text-info me-4">
+                <i class="bi bi-ticket-perforated-fill"></i>
+            </div>
+            <div class="flex-grow-1">
+              <h6 class="card-title text-muted">Tickets Hoy</h6>
+              <h2 class="fw-bold mb-0">{{ stats.ticketsHoy }}</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tickets Mes -->
+      <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body d-flex align-items-center p-4">
+            <div class="fs-2 text-secondary me-4">
+                <i class="bi bi-calendar3-week-fill"></i>
+            </div>
+            <div class="flex-grow-1">
+              <h6 class="card-title text-muted">Tickets Mes</h6>
+              <h2 class="fw-bold mb-0">{{ stats.ticketsMes }}</h2>
+            </div>
+          </div>
+        </div>
+      </div>
   </div>
 </div>

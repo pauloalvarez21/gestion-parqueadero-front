@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
@@ -28,6 +28,7 @@ interface Ticket {
 })
 export class ActiveTicketsComponent implements OnInit {
   private readonly http = inject(HttpClient);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   tickets: Ticket[] = [];
   isLoading = false;
@@ -38,17 +39,22 @@ export class ActiveTicketsComponent implements OnInit {
   }
 
   loadTickets() {
+    console.log('Iniciando loadTickets...');
     this.isLoading = true;
-    this.http.get<Ticket[]>(`${environment.baseUrl}/parqueadero/tickets/activos`).subscribe({
+    const url = `${environment.baseUrl}/parqueadero/tickets/activos`;
+    console.log('Consultando URL:', url);
+    this.http.get<Ticket[]>(url).subscribe({
       next: (data) => {
         console.log('Respuesta de tickets activos:', data);
         this.tickets = data;
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error al cargar tickets:', err);
         this.errorMessage = 'No se pudieron cargar los tickets activos.';
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
     });
   }

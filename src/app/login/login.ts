@@ -37,7 +37,7 @@ export class LoginComponent {
       this.errorMessage = '';
       const credentials = this.loginForm.value;
 
-      console.log('Enviando solicitud de login a:', `${environment.baseUrl}/auth/login`, credentials);
+      console.log('Enviando solicitud de login a:', `${environment.baseUrl}/auth/login`);
 
       this.http.post<LoginResponse>(`${environment.baseUrl}/auth/login`, credentials).subscribe({
         next: (response) => {

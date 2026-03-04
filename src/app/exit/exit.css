@@ -1,0 +1,33 @@
+/* Estilos normales para la pantalla */
+.receipt-container {
+  background-color: #fff;
+  border: 1px dashed #ccc; /* Efecto de ticket cortado */
+}
+
+/* Estilos específicos para impresión */
+@media print {
+  /* Ocultar todo el cuerpo por defecto */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Ocultar elementos marcados como no-print explícitamente */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Hacer visible solo el contenedor del recibo y sus hijos */
+  .receipt-container, .receipt-container * {
+    visibility: visible;
+  }
+
+  /* Posicionar el recibo en la parte superior de la hoja */
+  .receipt-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border: none; /* Quitar borde en impresión si se desea */
+    box-shadow: none !important;
+  }
+}

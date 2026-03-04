@@ -50,4 +50,16 @@ export class StatisticsComponent implements OnInit {
       },
     });
   }
+
+  getTotalSpaces(): number {
+    if (!this.stats) return 0;
+    return this.stats.espaciosOcupados + this.stats.espaciosDisponibles;
+  }
+
+  getOccupationPercentage(): number {
+    if (!this.stats || this.getTotalSpaces() === 0) {
+      return 0;
+    }
+    return (this.stats.espaciosOcupados / this.getTotalSpaces()) * 100;
+  }
 }
