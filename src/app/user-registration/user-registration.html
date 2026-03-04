@@ -1,20 +1,26 @@
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6">
-      
-      <div class="card shadow-sm">
+      <div class="card shadow-sm mb-4">
         <div class="card-header bg-primary text-white">
           <h3 class="mb-0"><i class="bi bi-person-plus-fill me-2"></i>Crear Usuario</h3>
         </div>
         <div class="card-body">
           <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
-            
             <!-- Campo Usuario -->
             <div class="mb-3">
               <label for="username" class="form-label">Nombre de Usuario</label>
-              <input type="text" id="username" class="form-control" 
-                     formControlName="username" placeholder="Ej: operador1"
-                     [class.is-invalid]="registrationForm.get('username')?.invalid && registrationForm.get('username')?.touched">
+              <input
+                type="text"
+                id="username"
+                class="form-control"
+                formControlName="username"
+                placeholder="Ej: operador1"
+                [class.is-invalid]="
+                  registrationForm.get('username')?.invalid &&
+                  registrationForm.get('username')?.touched
+                "
+              />
               <div class="invalid-feedback">
                 El nombre de usuario es requerido (mínimo 4 caracteres).
               </div>
@@ -23,20 +29,35 @@
             <!-- Campo Contraseña -->
             <div class="mb-3">
               <label for="password" class="form-label">Contraseña</label>
-              <input type="password" id="password" class="form-control" 
-                     formControlName="password" placeholder="******"
-                     [class.is-invalid]="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched">
-              <div class="invalid-feedback">
-                La contraseña es requerida (mínimo 6 caracteres).
-              </div>
+              <input
+                type="password"
+                id="password"
+                class="form-control"
+                formControlName="password"
+                placeholder="******"
+                [class.is-invalid]="
+                  registrationForm.get('password')?.invalid &&
+                  registrationForm.get('password')?.touched
+                "
+              />
+              <div class="invalid-feedback">La contraseña es requerida (mínimo 6 caracteres).</div>
             </div>
 
             <!-- Campo Confirmar Contraseña -->
             <div class="mb-3">
               <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
-              <input type="password" id="confirmPassword" class="form-control" 
-                     formControlName="confirmPassword" placeholder="******"
-                     [class.is-invalid]="(registrationForm.get('confirmPassword')?.invalid || registrationForm.hasError('mismatch')) && registrationForm.get('confirmPassword')?.touched">
+              <input
+                type="password"
+                id="confirmPassword"
+                class="form-control"
+                formControlName="confirmPassword"
+                placeholder="******"
+                [class.is-invalid]="
+                  (registrationForm.get('confirmPassword')?.invalid ||
+                    registrationForm.hasError('mismatch')) &&
+                  registrationForm.get('confirmPassword')?.touched
+                "
+              />
               <div class="invalid-feedback" *ngIf="registrationForm.hasError('mismatch')">
                 Las contraseñas no coinciden.
               </div>
@@ -44,28 +65,83 @@
 
             <!-- Botón Submit -->
             <div class="d-grid gap-2 mt-4">
-              <button type="submit" class="btn btn-primary btn-lg" [disabled]="isLoading || registrationForm.invalid">
-                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg"
+                [disabled]="isLoading || registrationForm.invalid"
+              >
+                <span
+                  *ngIf="isLoading"
+                  class="spinner-border spinner-border-sm me-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
                 {{ isLoading ? 'Procesando...' : 'Crear Usuario' }}
               </button>
             </div>
 
             <!-- Mensaje de Éxito -->
-            <div *ngIf="successMessage" class="alert alert-success mt-3 d-flex align-items-center animate-fade-in" role="alert">
+            <div
+              *ngIf="successMessage"
+              class="alert alert-success mt-3 d-flex align-items-center animate-fade-in"
+              role="alert"
+            >
               <i class="bi bi-check-circle-fill me-2"></i>
               <div>{{ successMessage }}</div>
             </div>
 
             <!-- Mensaje de Error -->
-            <div *ngIf="errorMessage" class="alert alert-danger mt-3 d-flex align-items-center animate-fade-in" role="alert">
+            <div
+              *ngIf="errorMessage"
+              class="alert alert-danger mt-3 d-flex align-items-center animate-fade-in"
+              role="alert"
+            >
               <i class="bi bi-exclamation-triangle-fill me-2"></i>
               <div>{{ errorMessage }}</div>
             </div>
-
           </form>
         </div>
       </div>
 
+      <!-- Card para Eliminar Usuario -->
+      <div class="card shadow-sm border-danger">
+        <div class="card-header bg-danger text-white">
+          <h3 class="mb-0"><i class="bi bi-person-dash-fill me-2"></i>Eliminar Usuario</h3>
+        </div>
+        <div class="card-body">
+          <p class="card-text">
+            Ingrese el nombre de usuario exacto que desea eliminar del sistema.
+          </p>
+
+          <div class="input-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Nombre de usuario (ej: operador1)"
+              #usernameInput
+            />
+            <button
+              class="btn btn-outline-danger"
+              type="button"
+              (click)="deleteUser(usernameInput)"
+              [disabled]="isDeleting"
+            >
+              <span
+                *ngIf="isDeleting"
+                class="spinner-border spinner-border-sm me-2"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <i class="bi bi-trash" *ngIf="!isDeleting"></i>
+              {{ isDeleting ? 'Eliminando...' : 'Eliminar' }}
+            </button>
+          </div>
+          <div class="form-text text-muted">
+            <i class="bi bi-info-circle"></i> Esta acción requiere confirmación y no se puede
+            deshacer.
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
