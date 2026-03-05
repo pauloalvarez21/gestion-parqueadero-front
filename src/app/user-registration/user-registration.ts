@@ -15,12 +15,15 @@ export class UserRegistrationComponent {
   private readonly fb = inject(FormBuilder);
   private readonly http = inject(HttpClient);
 
+  roles: string[] = ['ADMIN', 'OPERADOR', 'USER'];
+
   // Formulario con validación de contraseña coincidente
   registrationForm: FormGroup = this.fb.group(
     {
       username: ['', [Validators.required, Validators.minLength(4)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
+      role: ['USER', [Validators.required]],
     },
     { validators: this.passwordMatchValidator },
   );
@@ -36,15 +39,15 @@ export class UserRegistrationComponent {
       this.successMessage = '';
       this.errorMessage = '';
 
-      // Extraemos solo lo que la API necesita (AuthRequest)
-      const { username, password } = this.registrationForm.value;
-      const request = { username, password };
+      // Extraemos los datos del formulario que la API necesita
+      const { username, password, role } = this.registrationForm.value;
+      const request = { username, password, role };
 
       this.http.post(`${environment.baseUrl}/auth/register`, request).subscribe({
         next: (response: any) => {
           this.isLoading = false;
           this.successMessage = 'Usuario creado exitosamente.';
-          this.registrationForm.reset();
+          this.registrationForm.reset({ role: 'USER' });
           setTimeout(() => (this.successMessage = ''), 5000);
         },
         error: (err) => {

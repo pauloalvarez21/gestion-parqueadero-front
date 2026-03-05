@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -9,15 +9,18 @@ import { RouterLink } from '@angular/router';
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
+  actions: any[] = [];
+
   // Lista de acciones disponibles en el dashboard
-  actions = [
+  private readonly allActions = [
     {
       title: 'Registrar Entrada',
       icon: 'bi-box-arrow-in-right',
       description: 'Registrar el ingreso de un vehículo al parqueadero.',
       link: '/entry',
       color: 'text-success',
+      allowedRoles: ['ADMIN', 'OPERADOR'],
     },
     {
       title: 'Registrar Salida',
@@ -25,6 +28,7 @@ export class HomeComponent {
       description: 'Procesar la salida de un vehículo y calcular pago.',
       link: '/exit',
       color: 'text-danger',
+      allowedRoles: ['ADMIN', 'OPERADOR'],
     },
     {
       title: 'Tickets Activos',
@@ -32,6 +36,7 @@ export class HomeComponent {
       description: 'Ver lista de vehículos estacionados actualmente.',
       link: '/tickets',
       color: 'text-primary',
+      allowedRoles: ['ADMIN', 'OPERADOR'],
     },
     {
       title: 'Crear Usuario',
@@ -39,6 +44,7 @@ export class HomeComponent {
       description: 'Registrar un nuevo operador o administrador.',
       link: '/registration',
       color: 'text-primary',
+      allowedRoles: ['ADMIN'],
     },
     {
       title: 'Gestionar Espacios',
@@ -46,6 +52,7 @@ export class HomeComponent {
       description: 'Ver y administrar los espacios de parqueo.',
       link: '/spaces',
       color: 'text-info',
+      allowedRoles: ['ADMIN', 'OPERADOR'],
     },
     {
       title: 'Tarifas',
@@ -53,6 +60,7 @@ export class HomeComponent {
       description: 'Configurar los precios por minuto, hora o día.',
       link: '/tariffs',
       color: 'text-warning',
+      allowedRoles: ['ADMIN'],
     },
     {
       title: 'Vehículos',
@@ -60,6 +68,7 @@ export class HomeComponent {
       description: 'Administrar directorio de vehículos y propietarios.',
       link: '/vehicles',
       color: 'text-secondary',
+      allowedRoles: ['ADMIN', 'OPERADOR'],
     },
     {
       title: 'Estadísticas',
@@ -67,6 +76,7 @@ export class HomeComponent {
       description: 'Ver estadísticas de ocupación e ingresos.',
       link: '/statistics',
       color: 'text-dark',
+      allowedRoles: ['ADMIN'],
     },
     {
       title: 'Documentación API',
@@ -74,6 +84,16 @@ export class HomeComponent {
       description: 'Consultar la documentación técnica del sistema.',
       link: '/docs',
       color: 'text-secondary',
+      allowedRoles: ['ADMIN', 'OPERADOR', 'USER'],
     },
   ];
+
+  ngOnInit() {
+    const role = localStorage.getItem('role');
+    if (role) {
+      const currentRole = role.trim().toUpperCase();
+      console.log('Rol detectado en Home:', currentRole); // Para depuración
+      this.actions = this.allActions.filter((action) => action.allowedRoles.includes(currentRole));
+    }
+  }
 }

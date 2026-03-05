@@ -1,0 +1,25 @@
+.navbar {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link {
+  transition: color 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.nav-link.active {
+  font-weight: 600;
+  color: #fff !important;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 991px) {
+  .nav-link.active {
+    border-bottom: none;
+    border-left: 3px solid #fff;
+    padding-left: 10px;
+  }
+}

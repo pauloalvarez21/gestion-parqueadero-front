@@ -63,6 +63,22 @@
               </div>
             </div>
 
+            <!-- Campo Rol -->
+            <div class="mb-3">
+              <label for="role" class="form-label">Rol</label>
+              <select
+                id="role"
+                class="form-control"
+                formControlName="role"
+                [class.is-invalid]="
+                  registrationForm.get('role')?.invalid && registrationForm.get('role')?.touched
+                "
+              >
+                <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+              </select>
+              <div class="invalid-feedback">El rol es requerido.</div>
+            </div>
+
             <!-- Botón Submit -->
             <div class="d-grid gap-2 mt-4">
               <button

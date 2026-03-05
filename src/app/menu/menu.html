@@ -1,0 +1,43 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4" *ngIf="isLoggedIn">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" routerLink="/home">
+      <i class="bi bi-p-square-fill me-2"></i>Gestión Parqueadero
+    </a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item" *ngFor="let item of menuItems">
+          <a
+            class="nav-link"
+            [routerLink]="item.link"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: item.link === '/home' }"
+          >
+            <i [class]="'bi ' + item.icon"></i> {{ item.title }}
+          </a>
+        </li>
+      </ul>
+
+      <div class="d-flex align-items-center">
+        <span class="text-light me-3 user-select-none" *ngIf="username">
+          <i class="bi bi-person-circle"></i> {{ username }}
+        </span>
+        <button class="btn btn-outline-light btn-sm" (click)="logout()">
+          <i class="bi bi-box-arrow-right"></i> Salir
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
