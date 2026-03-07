@@ -75,12 +75,10 @@ export class MenuComponent implements OnInit {
     },
   ];
 
-  constructor(private router: Router) {
+  constructor(private readonly router: Router) {
     // Suscribirse a los eventos de navegación para actualizar el menú automáticamente
     // Esto asegura que el menú aparezca/desaparezca al hacer login/logout
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe(() => {
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
       this.checkLogin();
     });
   }
