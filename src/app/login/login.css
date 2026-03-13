@@ -1,7 +1,7 @@
 .login-container {
   min-height: 100vh;
   /* Reemplaza el degradado por tu imagen */
-  background: url('/images/fondo.jpg') no-repeat center center fixed;
+  background: url('/images/logo.png') no-repeat center center fixed;
   background-size: cover;
 }
 

@@ -2,6 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
+interface Action {
+  title: string;
+  icon: string;
+  description: string;
+  link: string;
+  color: string;
+  allowedRoles: string[];
+}
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -10,10 +19,10 @@ import { RouterLink } from '@angular/router';
   styleUrls: ['./home.css'],
 })
 export class HomeComponent implements OnInit {
-  actions: any[] = [];
+  actions: Action[] = [];
 
   // Lista de acciones disponibles en el dashboard
-  private readonly allActions = [
+  private readonly allActions: Action[] = [
     {
       title: 'Registrar Entrada',
       icon: 'bi-box-arrow-in-right',

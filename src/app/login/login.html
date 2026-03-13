@@ -1,32 +1,53 @@
 <div class="login-container d-flex align-items-center justify-content-center">
-  <div class="card shadow-lg border-0 rounded-4" style="width: 100%; max-width: 400px;">
+  <div class="card shadow-lg border-0 rounded-4" style="width: 100%; max-width: 400px">
     <div class="card-body p-5">
       <div class="text-center mb-4">
-        <div class="mb-3">
-          <img src="images/logo.png" alt="Logo Corporativo" class="img-fluid" style="max-height: 100px;">
-        </div>
         <h3 class="fw-bold text-dark">Bienvenido</h3>
         <p class="text-muted small">Ingresa tus credenciales para continuar</p>
       </div>
 
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="username" placeholder="Usuario" formControlName="username"
-            [class.is-invalid]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            placeholder="Usuario"
+            formControlName="username"
+            [class.is-invalid]="
+              loginForm.get('username')?.invalid && loginForm.get('username')?.touched
+            "
+          />
           <label for="username">Usuario</label>
         </div>
 
         <div class="form-floating mb-4">
-          <input type="password" class="form-control" id="password" placeholder="Contraseña" formControlName="password"
-            [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            placeholder="Contraseña"
+            formControlName="password"
+            [class.is-invalid]="
+              loginForm.get('password')?.invalid && loginForm.get('password')?.touched
+            "
+          />
           <label for="password">Contraseña</label>
         </div>
 
-        <div *ngIf="errorMessage" class="alert alert-danger py-2 small text-center mb-3" role="alert">
+        <div
+          *ngIf="errorMessage"
+          class="alert alert-danger py-2 small text-center mb-3"
+          role="alert"
+        >
           {{ errorMessage }}
         </div>
 
-        <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold rounded-3" [disabled]="isLoading || loginForm.invalid">
+        <button
+          type="submit"
+          class="btn btn-primary w-100 py-2 fw-semibold rounded-3"
+          [disabled]="isLoading || loginForm.invalid"
+        >
           {{ isLoading ? 'Ingresando...' : 'Iniciar Sesión' }}
         </button>
       </form>
@@ -35,12 +56,23 @@
 </div>
 
 <!-- Modal de Error (Popup) -->
-<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="errorModal"
+  tabindex="-1"
+  aria-labelledby="errorModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content border-0 shadow">
       <div class="modal-header bg-danger text-white">
         <h5 class="modal-title" id="errorModalLabel">Error de Inicio de Sesión</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body text-center py-4">
         <p class="mb-0 fw-medium fs-5">{{ errorMessage }}</p>
