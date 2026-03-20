@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment.development';
 // Definimos la interfaz basada en tu TarifaDTO
 export interface Tarifa {
   id?: number;
+  tipoVehiculo: string;
   tipoTarifa: string;
   valor: number;
 }
@@ -25,6 +26,7 @@ export class TariffManagementComponent implements OnInit {
 
   // Datos y estado tipados
   tariffs: Tarifa[] = [];
+  vehicleTypes = ['CARRO', 'MOTO', 'CAMION', 'BICICLETA'];
   tariffTypes = ['POR_MINUTO', 'POR_HORA', 'POR_DIA', 'POR_MES', 'FRACCION'];
   isLoading = false;
   successMessage = '';
@@ -33,6 +35,7 @@ export class TariffManagementComponent implements OnInit {
   // Formulario reactivo
   tariffForm: FormGroup = this.fb.group({
     id: [null],
+    tipoVehiculo: ['', Validators.required],
     tipoTarifa: ['', Validators.required],
     valor: [null, [Validators.required, Validators.min(0)]],
   });
@@ -97,11 +100,11 @@ export class TariffManagementComponent implements OnInit {
   }
 
   deleteTariff(tariff: Tarifa) {
-    if (!tariff.tipoTarifa) return;
+    if (!tariff.tipoVehiculo || !tariff.tipoTarifa) return;
     if (confirm('¿Está seguro de que desea eliminar esta tarifa?')) {
       this.isLoading = true;
       this.http
-        .delete(`${environment.baseUrl}/parqueadero/tarifas/${tariff.tipoTarifa}`)
+        .delete(`${environment.baseUrl}/parqueadero/tarifas/${tariff.tipoVehiculo}/${tariff.tipoTarifa}`)
         .subscribe({
           next: () => {
             this.successMessage = 'Tarifa eliminada correctamente.';

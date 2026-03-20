@@ -11,8 +11,25 @@
             <input type="hidden" formControlName="id" />
 
             <div class="mb-3">
+              <label for="tipoVehiculo" class="form-label">Tipo de Vehículo</label>
+              <select id="tipoVehiculo" class="form-select" formControlName="tipoVehiculo">
+                <option value="" disabled>Seleccione un tipo</option>
+                <option *ngFor="let vType of vehicleTypes" [value]="vType">
+                  {{ vType }}
+                </option>
+              </select>
+              <div
+                class="text-danger small mt-1"
+                *ngIf="tariffForm.get('tipoVehiculo')?.invalid && tariffForm.get('tipoVehiculo')?.touched"
+              >
+                Seleccione un tipo de vehículo.
+              </div>
+            </div>
+
+            <div class="mb-3">
               <label for="tipoTarifa" class="form-label">Tipo de Tarifa</label>
               <select id="tipoTarifa" class="form-select" formControlName="tipoTarifa">
+                <option value="" disabled>Seleccione un tipo</option>
                 <option *ngFor="let type of tariffTypes" [value]="type">
                   {{ type.replace('_', ' ') }}
                 </option>
@@ -90,13 +107,17 @@
             <table class="table table-hover mb-0 align-middle">
               <thead class="table-light">
                 <tr>
-                  <th>Tipo</th>
+                  <th>Vehículo</th>
+                  <th>Tipo Tarifa</th>
                   <th>Valor</th>
                   <th class="text-end">Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let tariff of tariffs">
+                  <td>
+                    <span class="badge bg-secondary">{{ tariff.tipoVehiculo }}</span>
+                  </td>
                   <td>
                     <span class="badge bg-info text-dark">{{
                       tariff.tipoTarifa.replace('_', ' ')
@@ -118,7 +139,7 @@
                   </td>
                 </tr>
                 <tr *ngIf="tariffs.length === 0 && !isLoading">
-                  <td colspan="3" class="text-center py-4 text-muted">
+                  <td colspan="4" class="text-center py-4 text-muted">
                     No hay tarifas registradas.
                   </td>
                 </tr>

@@ -1,41 +1,41 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4" *ngIf="isLoggedIn">
-  <div class="container-fluid">
-    <a class="navbar-brand fw-bold" routerLink="/home">
-      <i class="bi bi-p-square-fill me-2"></i>Gestión Parqueadero
+<nav class="navbar navbar-expand-lg navbar-premium" *ngIf="isLoggedIn">
+  <div class="container-fluid px-0">
+    <a class="navbar-brand d-flex align-items-center brand-wrapper" routerLink="/home" (click)="collapseMenu()">
+      <img src="images/logo.png" alt="Logo" height="42" class="me-2 d-inline-block align-top logo-navbar">
+      <span class="brand-text">Gestión Parqueadero</span>
     </a>
 
     <button
-      class="navbar-toggler"
+      class="navbar-toggler border-0 shadow-none p-2"
       type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="!isMenuCollapsed"
       aria-label="Toggle navigation"
     >
-      <span class="navbar-toggler-icon"></span>
+      <i class="bi bi-list fs-1"></i>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <div class="collapse navbar-collapse" id="navbarNav" [class.show]="!isMenuCollapsed">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 px-2">
         <li class="nav-item" *ngFor="let item of menuItems">
           <a
             class="nav-link"
             [routerLink]="item.link"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: item.link === '/home' }"
+            (click)="collapseMenu()"
           >
-            <i [class]="'bi ' + item.icon"></i> {{ item.title }}
+            <i [class]="'bi ' + item.icon + ' me-2'"></i> {{ item.title }}
           </a>
         </li>
       </ul>
 
-      <div class="d-flex align-items-center">
-        <span class="text-light me-3 user-select-none" *ngIf="username">
-          <i class="bi bi-person-circle"></i> {{ username }}
+      <div class="d-flex align-items-center ps-lg-4 border-start-lg border-glass">
+        <span class="text-muted me-3 d-none d-xl-inline small fw-semibold" *ngIf="username">
+          <i class="bi bi-person-circle me-1"></i> {{ username }}
         </span>
-        <button class="btn btn-outline-light btn-sm" (click)="logout()">
-          <i class="bi bi-box-arrow-right"></i> Salir
+        <button class="btn btn-logout rounded-pill" (click)="logout(); collapseMenu()">
+          <i class="bi bi-power me-2"></i> Salir
         </button>
       </div>
     </div>

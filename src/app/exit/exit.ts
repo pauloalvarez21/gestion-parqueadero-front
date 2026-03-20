@@ -21,6 +21,9 @@ interface PagoResponse {
   descuento: number;
   valorTotal: number;
   mensaje: string;
+  creadoPor: string;
+  finalizadoPor: string;
+  numeroFactura: string;
 }
 
 @Component({

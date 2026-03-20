@@ -155,7 +155,7 @@ export class UserRegistrationComponent implements OnInit {
   confirmDelete() {
     if (this.pendingDeleteUser) {
       this.isDeleting = true;
-      this.http.delete(`${environment.baseUrl}/auth/eliminar/${this.pendingDeleteUser}`).subscribe({
+      this.http.delete(`${environment.baseUrl}/usuarios/${this.pendingDeleteUser}`).subscribe({
         next: () => {
           this.isDeleting = false;
           this.showModal(`Usuario "${this.pendingDeleteUser}" eliminado exitosamente.`, false);

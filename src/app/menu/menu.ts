@@ -15,6 +15,15 @@ export class MenuComponent implements OnInit {
   isLoggedIn: boolean = false;
   username: string | null = '';
   role: string | null = '';
+  isMenuCollapsed = true;
+
+  toggleMenu() {
+    this.isMenuCollapsed = !this.isMenuCollapsed;
+  }
+
+  collapseMenu() {
+    this.isMenuCollapsed = true;
+  }
 
   // Definición de todas las opciones del menú y sus permisos
   private readonly allMenuItems = [
@@ -68,6 +77,12 @@ export class MenuComponent implements OnInit {
       allowedRoles: ['ADMIN'],
     },
     {
+      title: 'Facturación',
+      icon: 'bi-file-earmark-text',
+      link: '/billing',
+      allowedRoles: ['ADMIN'],
+    },
+    {
       title: 'Docs',
       icon: 'bi-file-earmark-code',
       link: '/docs',
@@ -80,6 +95,7 @@ export class MenuComponent implements OnInit {
     // Esto asegura que el menú aparezca/desaparezca al hacer login/logout
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
       this.checkLogin();
+      this.collapseMenu();
     });
   }
 

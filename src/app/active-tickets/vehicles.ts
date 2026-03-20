@@ -34,10 +34,49 @@ export class VehiclesComponent implements OnInit {
   successMessage = '';
   searchPlaca = '';
 
+  // Paginación
+  currentPage = 1;
+  pageSize = 10;
+
+  get paginatedVehicles() {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return this.vehicles.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  get totalPages() {
+    return Math.ceil(this.vehicles.length / this.pageSize);
+  }
+
+  setPage(page: number) {
+    this.currentPage = page;
+  }
+
   newVehicle: Vehiculo = {
     placa: '',
     tipo: 'CARRO',
   };
+
+  onPlacaChange(placa: string) {
+    this.newVehicle.placa = placa.toUpperCase();
+    if (this.newVehicle.placa.length >= 6) {
+      this.http.get<Vehiculo>(`${environment.baseUrl}/vehiculos/${this.newVehicle.placa}`)
+        .subscribe({
+          next: (vehiculo) => {
+            if (vehiculo) {
+              console.log('Vehículo existente encontrado:', vehiculo);
+              this.newVehicle = { ...vehiculo };
+              this.successMessage = 'Datos cargados de un vehículo existente.';
+              setTimeout(() => this.successMessage = '', 3000);
+              this.cdr.detectChanges();
+            }
+          },
+          error: () => {
+            // No hacer nada si no se encuentra (es un vehículo nuevo)
+            console.log('Vehículo no encontrado, es un nuevo registro.');
+          }
+        });
+    }
+  }
 
   ngOnInit() {
     this.loadVehicles();
@@ -45,6 +84,7 @@ export class VehiclesComponent implements OnInit {
 
   loadVehicles() {
     this.errorMessage = '';
+    this.currentPage = 1; // Resetear paginación al buscar
     console.log('Iniciando carga de vehículos...');
     this.isLoading = true;
     let url = `${environment.baseUrl}/vehiculos`;
@@ -69,11 +109,20 @@ export class VehiclesComponent implements OnInit {
     });
   }
 
+  editVehicle(vehicle: Vehiculo) {
+    this.newVehicle = { ...vehicle };
+  }
+
   addVehicle() {
     this.isLoading = true;
     this.errorMessage = '';
     this.successMessage = '';
-    this.http.post<Vehiculo>(`${environment.baseUrl}/vehiculos`, this.newVehicle).subscribe({
+
+    const obs = this.newVehicle.id 
+      ? this.http.put<Vehiculo>(`${environment.baseUrl}/vehiculos/${this.newVehicle.id}`, this.newVehicle)
+      : this.http.post<Vehiculo>(`${environment.baseUrl}/vehiculos`, this.newVehicle);
+
+    obs.subscribe({
       next: () => {
         this.isLoading = false;
         this.searchPlaca = '';
@@ -86,7 +135,7 @@ export class VehiclesComponent implements OnInit {
           const modal = bootstrap.Modal.getInstance(modalElement);
           modal?.hide();
         }
-        this.successMessage = 'Vehículo registrado con éxito.';
+        this.successMessage = 'Vehículo guardado con éxito.';
         setTimeout(() => {
           this.successMessage = '';
           this.cdr.detectChanges();
@@ -95,8 +144,8 @@ export class VehiclesComponent implements OnInit {
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = err.error?.message || 'Error al registrar el vehículo.';
-        console.error('Error adding vehicle:', err);
+        this.errorMessage = err.error?.message || 'Error al guardar el vehículo.';
+        console.error('Error saving vehicle:', err);
         this.cdr.detectChanges();
       },
     });

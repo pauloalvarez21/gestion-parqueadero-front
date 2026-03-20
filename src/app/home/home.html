@@ -1,35 +1,33 @@
-<div class="container py-5">
-  <div class="row mb-5 text-center">
+<div class="container py-5 dashboard-container animate-fade-in">
+  <div class="row welcome-section text-center">
     <div class="col-lg-8 mx-auto">
-      <h1 class="display-5 fw-bold text-dark">Panel de Control</h1>
-      <p class="lead text-muted">
-        Bienvenido al sistema de gestión. Seleccione una opción para comenzar.
+      <h1 class="welcome-title">Bienvenido, {{ username || 'Administrador' }}</h1>
+      <p class="lead text-muted fs-5">
+        Gestión inteligente de flujos de parqueadero y resoluciones oficiales.
       </p>
     </div>
   </div>
 
-  <div *ngIf="actions.length === 0" class="alert alert-warning text-center" role="alert">
-    <i class="bi bi-exclamation-triangle-fill me-2"></i>
-    No se encontraron opciones disponibles para tu rol. Por favor, contacta al administrador.
+  <div *ngIf="actions.length === 0" class="col-12 text-center py-5 glass-panel rounded-lg">
+    <i class="bi bi-shield-lock fs-1 text-warning mb-3 d-block"></i>
+    <h3 class="fw-bold">Sin Accesos Disponibles</h3>
+    <p class="text-muted">No se encontraron opciones asignadas a tu rol actual.</p>
   </div>
 
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-    <div class="col" *ngFor="let action of actions">
-      <!-- Tarjeta interactiva -->
+  <div class="row g-4 px-lg-4">
+    <div class="col-12 col-md-6 col-lg-4 animate-fade-in" *ngFor="let action of actions; let i = index" [style.animation-delay]="i * 0.05 + 's'">
+      <!-- Tarjeta Premium -->
       <div
-        class="card h-100 shadow-sm border-0 hover-card"
+        class="card h-100 action-card"
         [routerLink]="action.link"
         style="cursor: pointer"
-        role="button"
       >
-        <div
-          class="card-body text-center p-4 d-flex flex-column align-items-center justify-content-center"
-        >
-          <div class="mb-3">
+        <div class="card-body p-4 d-flex flex-column align-items-center text-center">
+          <div class="icon-wrapper">
             <i class="bi {{ action.icon }} fs-1" [ngClass]="action.color"></i>
           </div>
-          <h5 class="card-title fw-bold">{{ action.title }}</h5>
-          <p class="card-text text-muted small">{{ action.description }}</p>
+          <h5 class="action-title">{{ action.title }}</h5>
+          <p class="action-description">{{ action.description }}</p>
         </div>
       </div>
     </div>

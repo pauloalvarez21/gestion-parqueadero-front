@@ -1,0 +1,64 @@
+.card-header {
+    border-bottom: 1px solid var(--border-glass) !important;
+}
+
+.card-header.bg-info {
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%) !important;
+    border: none !important;
+}
+
+.btn-info {
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%) !important;
+    border: none !important;
+    color: white !important;
+    box-shadow: 0 4px 14px 0 rgba(14, 165, 233, 0.4);
+}
+
+.btn-info:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(14, 165, 233, 0.6);
+}
+
+.text-info {
+    color: #0ea5e9 !important;
+}
+
+.receipt-container {
+    max-width: 450px;
+    margin: 0 auto;
+}
+
+label.fw-semibold {
+    font-size: 0.85rem;
+    color: var(--text-muted) !important;
+}
+
+.progress {
+    height: 12px !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 20px !important;
+    overflow: hidden;
+}
+
+.progress-bar {
+    transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+}
+
+.badge.bg-success {
+    background: rgba(16, 185, 129, 0.15) !important;
+    color: #10b981 !important;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge.bg-danger {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #ef4444 !important;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+}

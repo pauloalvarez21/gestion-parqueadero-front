@@ -1,13 +1,13 @@
 .space-card {
-    transition: transform 0.2s;
-    background-color: #f8f9fa; /* Gris muy claro para disponibles */
+  transition: transform 0.2s;
+  background-color: var(--color-light-gray); /* Usa variable global */
 }
 
 .space-card:hover {
-    transform: translateY(-3px);
+  transform: translateY(-3px);
 }
 
 .space-card.occupied {
-    background-color: #fff5f5; /* Rojo muy claro para ocupados */
-    border: 1px solid #ffcccc !important;
+  background-color: var(--color-space-occupied-bg); /* Usa variable de tema */
+  border: 1px solid var(--color-space-occupied-border) !important; /* Usa variable de tema */
 }

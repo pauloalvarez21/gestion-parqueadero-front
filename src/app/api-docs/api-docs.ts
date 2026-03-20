@@ -12,7 +12,7 @@ export class ApiDocsComponent {
   apiInfo = {
     title: 'API Gestión Parqueadero',
     description: 'API para la gestión de entradas, salidas, pagos y espacios de un parqueadero.',
-    version: '1.0.0',
+    version: '1.2.0',
     server: 'http://localhost:8082',
   };
 
@@ -143,12 +143,18 @@ export class ApiDocsComponent {
       responses: { '200': 'Tarifa guardada (TarifaDTO)' },
     },
     {
-      path: '/api/parqueadero/tarifas/{tipoTarifa}',
+      path: '/api/parqueadero/tarifas/{tipoVehiculo}/{tipoTarifa}',
       method: 'DELETE',
-      summary: 'Elimina una tarifa global (Admin)',
+      summary: 'Eliminar una tarifa global específica (Admin)',
       tags: ['Parqueadero'],
       security: 'Bearer Auth',
       parameters: [
+        {
+          name: 'tipoVehiculo',
+          in: 'path',
+          required: true,
+          description: 'Tipo de vehículo (CARRO, MOTO, CAMION, BICICLETA)',
+        },
         {
           name: 'tipoTarifa',
           in: 'path',
@@ -156,7 +162,84 @@ export class ApiDocsComponent {
           description: 'Tipo de tarifa a eliminar',
         },
       ],
-      responses: { '204': 'Tarifa eliminada exitosamente' },
+      responses: { '204': 'Tarifa eliminada' },
+    },
+    // --- Vehiculo Controller ---
+    {
+      path: '/api/vehiculos',
+      method: 'GET',
+      summary: 'Listar vehículos (opcionalmente filtrar por placa)',
+      tags: ['Vehiculos'],
+      security: 'Bearer Auth',
+      parameters: [
+        {
+          name: 'placa',
+          in: 'query',
+          required: false,
+          description: 'Placa del vehículo para filtrar',
+        },
+      ],
+      responses: { '200': 'Lista de vehículos (Array<VehiculoDTO>)' },
+    },
+    {
+      path: '/api/vehiculos',
+      method: 'POST',
+      summary: 'Registrar nuevo vehículo',
+      tags: ['Vehiculos'],
+      security: 'Bearer Auth',
+      requestBody: 'VehiculoDTO',
+      responses: { '201': 'Vehículo creado' },
+    },
+    {
+      path: '/api/vehiculos/{placa}',
+      method: 'GET',
+      summary: 'Obtener vehículo por placa',
+      tags: ['Vehiculos'],
+      security: 'Bearer Auth',
+      parameters: [
+        {
+          name: 'placa',
+          in: 'path',
+          required: true,
+          description: 'Placa del vehículo',
+        },
+      ],
+      responses: { '200': 'Detalle del vehículo (VehiculoDTO)' },
+    },
+    {
+      path: '/api/vehiculos/{id}',
+      method: 'PUT',
+      summary: 'Actualizar vehículo',
+      tags: ['Vehiculos'],
+      security: 'Bearer Auth',
+      parameters: [
+        {
+          name: 'id',
+          in: 'path',
+          required: true,
+          description: 'ID del vehículo',
+        },
+      ],
+      requestBody: 'VehiculoDTO',
+      responses: { '200': 'Vehículo actualizado' },
+    },
+    // --- Tarifa Controller (Entidad Directa) ---
+    {
+      path: '/api/tarifas',
+      method: 'GET',
+      summary: 'Listar todas las tarifas (Entidad)',
+      tags: ['Tarifas'],
+      security: 'Bearer Auth',
+      responses: { '200': 'Lista de tarifas (Array<Tarifa>)' },
+    },
+    {
+      path: '/api/tarifas',
+      method: 'POST',
+      summary: 'Guardar o actualizar tarifa (Entidad)',
+      tags: ['Tarifas'],
+      security: 'Bearer Auth',
+      requestBody: 'Tarifa',
+      responses: { '200': 'Tarifa guardada (Tarifa)' },
     },
   ];
 
@@ -173,7 +256,7 @@ export class ApiDocsComponent {
       name: 'EntradaRequest',
       properties: [
         { name: 'placa', type: 'string' },
-        { name: 'tipoVehiculo', type: 'string', enum: ['CARRO', 'MOTO', 'BICICLETA'] },
+        { name: 'tipoVehiculo', type: 'string', enum: ['CARRO', 'MOTO', 'CAMION', 'BICICLETA'] },
         {
           name: 'tipoTarifa',
           type: 'string',
@@ -192,7 +275,7 @@ export class ApiDocsComponent {
     {
       name: 'AgregarEspaciosRequest',
       properties: [
-        { name: 'tipoVehiculo', type: 'string', enum: ['CARRO', 'MOTO', 'BICICLETA'] },
+        { name: 'tipoVehiculo', type: 'string', enum: ['CARRO', 'MOTO', 'CAMION', 'BICICLETA'] },
         { name: 'cantidad', type: 'integer' },
         { name: 'tarifaBase', type: 'number' },
       ],
@@ -200,7 +283,7 @@ export class ApiDocsComponent {
     {
       name: 'EliminarEspaciosRequest',
       properties: [
-        { name: 'tipoVehiculo', type: 'string', enum: ['CARRO', 'MOTO', 'BICICLETA'] },
+        { name: 'tipoVehiculo', type: 'string', enum: ['CARRO', 'MOTO', 'CAMION', 'BICICLETA'] },
         { name: 'cantidad', type: 'integer' },
       ],
     },
@@ -255,7 +338,34 @@ export class ApiDocsComponent {
     {
       name: 'TarifaDTO',
       properties: [
-        { name: 'id', type: 'integer' },
+        { name: 'tipoVehiculo', type: 'string', enum: ['CARRO', 'MOTO', 'CAMION', 'BICICLETA'] },
+        {
+          name: 'tipoTarifa',
+          type: 'string',
+          enum: ['POR_MINUTO', 'POR_HORA', 'POR_DIA', 'POR_MES', 'FRACCION'],
+        },
+        { name: 'valor', type: 'number' },
+      ],
+    },
+    {
+      name: 'VehiculoDTO',
+      properties: [
+        { name: 'id', type: 'integer (int64)' },
+        { name: 'placa', type: 'string' },
+        { name: 'tipo', type: 'string', enum: ['CARRO', 'MOTO', 'CAMION', 'BICICLETA'] },
+        { name: 'marca', type: 'string' },
+        { name: 'modelo', type: 'string' },
+        { name: 'color', type: 'string' },
+        { name: 'nombrePropietario', type: 'string' },
+        { name: 'telefonoPropietario', type: 'string' },
+        { name: 'fechaRegistro', type: 'string (date-time)' },
+      ],
+    },
+    {
+      name: 'Tarifa (Entidad)',
+      properties: [
+        { name: 'id', type: 'integer (int64)' },
+        { name: 'tipoVehiculo', type: 'string', enum: ['CARRO', 'MOTO', 'CAMION', 'BICICLETA'] },
         {
           name: 'tipoTarifa',
           type: 'string',

@@ -1,0 +1,162 @@
+<div class="container py-5">
+  <div class="row mb-4">
+    <div class="col">
+      <h2 class="fw-bold text-dark"><i class="bi bi-file-earmark-text me-2"></i>Facturación DIAN</h2>
+      <p class="text-muted">Configura la resolución oficial de numeración para facturación electrónica.</p>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Columna Izquierda: Formulario -->
+    <div class="col-lg-6">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-info text-white p-3">
+          <h5 class="mb-0"><i class="bi bi-gear-fill me-2"></i>Configurar Resolución</h5>
+        </div>
+        <div class="card-body p-4">
+          <form [formGroup]="configForm" (ngSubmit)="onSubmit()">
+            
+            <div class="mb-3">
+              <label for="numeroResolucion" class="form-label fw-semibold text-muted">Número de Resolución</label>
+              <input type="text" id="numeroResolucion" class="form-control" formControlName="numeroResolucion" placeholder="Ej: 187640000001">
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="fechaResolucion" class="form-label fw-semibold text-muted">Fecha Resolución</label>
+                <input type="date" id="fechaResolucion" class="form-control" formControlName="fechaResolucion">
+              </div>
+              <div class="col-md-6">
+                <label for="prefijo" class="form-label fw-semibold text-muted">Prefijo (Opcional)</label>
+                <input type="text" id="prefijo" class="form-control" formControlName="prefijo" placeholder="Ej: PRK">
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <label for="numeroDesde" class="form-label fw-semibold text-muted">Desde</label>
+                <input type="number" id="numeroDesde" class="form-control" formControlName="numeroDesde">
+              </div>
+              <div class="col-md-4">
+                <label for="numeroHasta" class="form-label fw-semibold text-muted">Hasta</label>
+                <input type="number" id="numeroHasta" class="form-control" formControlName="numeroHasta">
+              </div>
+              <div class="col-md-4">
+                <label for="numeroActual" class="form-label fw-semibold text-muted">Actual (Siguiente)</label>
+                <input type="number" id="numeroActual" class="form-control" formControlName="numeroActual">
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="fechaInicio" class="form-label fw-semibold text-muted">Fecha Inicio</label>
+                <input type="date" id="fechaInicio" class="form-control" formControlName="fechaInicio">
+              </div>
+              <div class="col-md-6">
+                <label for="fechaFin" class="form-label fw-semibold text-muted">Fecha Vencimiento</label>
+                <input type="date" id="fechaFin" class="form-control" formControlName="fechaFin">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="mensajePiePagina" class="form-label fw-semibold text-muted">Mensaje Pie de Factura</label>
+              <textarea id="mensajePiePagina" class="form-control" formControlName="mensajePiePagina" rows="3" placeholder="Mensaje oficial habilitado por DIAN..."></textarea>
+            </div>
+
+            <div *ngIf="successMessage" class="alert alert-success d-flex align-items-center mb-3">
+              <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+              <div>{{ successMessage }}</div>
+            </div>
+
+            <div *ngIf="errorMessage" class="alert alert-danger mb-3">
+              <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+              <div>{{ errorMessage }}</div>
+            </div>
+
+            <div class="d-grid mt-4">
+              <button type="submit" class="btn btn-info btn-lg text-white" [disabled]="isLoading || configForm.invalid">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                <i *ngIf="!isLoading" class="bi bi-save me-2"></i>
+                {{ isLoading ? 'Guardando...' : 'Aplicar Configuración' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna Derecha: Vista Actual -->
+    <div class="col-lg-6">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-header bg-white p-3 d-flex justify-content-between align-items-center">
+          <h5 class="mb-0 text-muted fw-bold"><i class="bi bi-info-circle-fill me-2"></i>Estado de Resolución</h5>
+          <span *ngIf="activeResolucion?.activa" class="badge bg-success rounded-pill px-3 py-2">ACTIVA</span>
+          <span *ngIf="!activeResolucion?.activa" class="badge bg-danger rounded-pill px-3 py-2">SIN RESOLUCIÓN</span>
+        </div>
+        <div class="card-body p-4">
+          <div *ngIf="!activeResolucion" class="text-center py-5">
+            <i class="bi bi-journal-x fs-1 text-light"></i>
+            <p class="mt-3 text-muted">No se ha cargado una resolución vigente.</p>
+          </div>
+
+          <div *ngIf="activeResolucion" class="list-group list-group-flush">
+            <div class="list-group-item px-0 border-0 mb-3">
+              <label class="small text-muted text-uppercase fw-bold">Número DIAN:</label>
+              <p class="fs-5 mb-0 fw-bold">{{ activeResolucion.numeroResolucion }}</p>
+            </div>
+            
+            <div class="row g-3">
+              <div class="col-6">
+                <div class="p-3 bg-light rounded shadow-sm">
+                  <label class="small text-muted text-uppercase fw-bold d-block">Numeración:</label>
+                  <span class="fs-5 fw-bold">{{ activeResolucion.prefijo }}{{ activeResolucion.numeroDesde }} - {{ activeResolucion.numeroHasta }}</span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-3 bg-light rounded shadow-sm">
+                  <label class="small text-muted text-uppercase fw-bold d-block">Siguiente Número:</label>
+                  <span class="fs-5 fw-bold text-info">{{ activeResolucion.prefijo }}{{ activeResolucion.numeroActual + 1 }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="list-group-item px-0 border-0 mt-4 d-flex justify-content-between bg-white">
+              <div>
+                <label class="small text-muted text-uppercase fw-bold">Fecha Resolución:</label>
+                <p class="mb-0">{{ activeResolucion.fechaResolucion | date:'mediumDate' }}</p>
+              </div>
+              <div class="text-end">
+                <label class="small text-muted text-uppercase fw-bold">Vigencia:</label>
+                <p class="mb-0 text-danger fw-bold">{{ activeResolucion.fechaFin | date:'mediumDate' }}</p>
+              </div>
+            </div>
+
+             <div class="list-group-item px-0 border-0 mt-4 bg-white">
+                <label class="small text-muted text-uppercase fw-bold">Mensaje Pie de Página:</label>
+                <div class="p-3 border rounded font-monospace small bg-light mt-2">
+                  {{ activeResolucion.mensajePiePagina || 'No se ha configurado mensaje adicional.' }}
+                </div>
+            </div>
+
+            <!-- Dashboard Usage -->
+             <div class="mt-5">
+              <div class="d-flex justify-content-between mb-1">
+                <span class="small text-muted">Consumo de numeración:</span>
+                <span class="small fw-bold">{{ (activeResolucion.numeroActual / activeResolucion.numeroHasta * 100) | number:'1.0-1' }}%</span>
+              </div>
+              <div class="progress" style="height: 10px;">
+                <div class="progress-bar progress-bar-striped" role="progressbar" 
+                  [style.width.%]="(activeResolucion.numeroActual / activeResolucion.numeroHasta * 100)"
+                  [class.bg-danger]="(activeResolucion.numeroActual / activeResolucion.numeroHasta * 100) > 90">
+                </div>
+              </div>
+              <p class="small text-muted text-end mt-1">
+                Restan {{ activeResolucion.numeroHasta - activeResolucion.numeroActual }} números.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

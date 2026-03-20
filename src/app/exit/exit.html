@@ -51,6 +51,7 @@
             <i class="bi bi-p-square-fill fs-1 text-primary"></i>
             <h3 class="fw-bold mt-2">Recibo de Pago</h3>
             <p class="text-muted mb-0">{{ payment.codigoTicket }}</p>
+            <p *ngIf="payment.numeroFactura" class="fw-bold text-dark mt-1">Factura N°: {{ payment.numeroFactura }}</p>
           </div>
 
           <div class="row mb-2">
@@ -90,6 +91,7 @@
 
           <div class="mt-4 text-center text-muted small">
             <p class="mb-0">{{ payment.mensaje }}</p>
+            <p *ngIf="payment.finalizadoPor" class="mb-0">Atendido por: {{ payment.finalizadoPor }}</p>
             <p>¡Gracias por su visita!</p>
           </div>
         </div>

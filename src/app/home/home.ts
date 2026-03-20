@@ -20,6 +20,7 @@ interface Action {
 })
 export class HomeComponent implements OnInit {
   actions: Action[] = [];
+  username: string | null = '';
 
   // Lista de acciones disponibles en el dashboard
   private readonly allActions: Action[] = [
@@ -88,6 +89,14 @@ export class HomeComponent implements OnInit {
       allowedRoles: ['ADMIN'],
     },
     {
+      title: 'Historial de Tickets',
+      icon: 'bi-clock-history',
+      description: 'Consultar el historial de todos los tickets finalizados.',
+      link: '/history',
+      color: 'text-muted',
+      allowedRoles: ['ADMIN'],
+    },
+    {
       title: 'Documentación API',
       icon: 'bi-file-earmark-code',
       description: 'Consultar la documentación técnica del sistema.',
@@ -95,9 +104,18 @@ export class HomeComponent implements OnInit {
       color: 'text-secondary',
       allowedRoles: ['ADMIN', 'OPERADOR', 'USER'],
     },
+    {
+      title: 'Facturación',
+      icon: 'bi-file-earmark-text',
+      description: 'Configurar resolución de facturación DIAN.',
+      link: '/billing',
+      color: 'text-info',
+      allowedRoles: ['ADMIN'],
+    },
   ];
 
   ngOnInit() {
+    this.username = localStorage.getItem('username');
     const role = localStorage.getItem('role');
     if (role) {
       const currentRole = role.trim().toUpperCase();

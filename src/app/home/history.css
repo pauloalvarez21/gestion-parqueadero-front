@@ -1,0 +1,37 @@
+/* Estilos para centrar el spinner y dar espacio */
+.container {
+  padding-bottom: 2rem;
+}
+
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Estilo Limpio y Moderno para la tabla */
+.table {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius-base); /* Bordes redondeados modernos */
+  overflow: hidden; /* Asegura que los bordes redondeados se apliquen a las filas */
+  box-shadow: var(--shadow-base); /* Sombra sutil para profundidad */
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+/* Cabecera limpia */
+.table thead th {
+  border-top: none;
+  border-bottom: 2px solid var(--color-medium-gray);
+  background-color: var(--color-light-gray);
+  color: var(--color-dark-gray);
+  font-weight: 600;
+}
+
+/* Efecto hover más suave y moderno */
+.table-hover tbody tr:hover {
+  background-color: var(
+    --color-hover-light-blue
+  ); /* Un tono azulado muy sutil en lugar de gris plano */
+  transition: background-color var(--transition-speed) var(--transition-timing);
+  color: var(--color-dark-gray); /* Asegura contraste en el hover */
+}

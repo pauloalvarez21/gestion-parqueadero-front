@@ -1,0 +1,54 @@
+/* You can add global styles to this file, and also import other style files */
+
+/*
+  Define el tema por defecto como 'light'.
+  El ThemeService cambiará esto a 'dark' cuando sea necesario.
+*/
+[data-bs-theme='light'] {
+}
+
+:root {
+  /* Paleta de Colores */
+  --color-primary: #0d6efd; /* Azul principal de Bootstrap */
+  --color-light-gray: #f8f9fa;
+  --color-medium-gray: #dee2e6;
+  --color-dark-gray: #495057;
+  --color-hover-light-blue: #f1f4f9;
+  --color-white: #ffffff;
+
+  /* Sombras */
+  --shadow-base: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --shadow-hover: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+
+  /* Bordes */
+  --border-radius-base: 0.5rem;
+
+  /* Transiciones */
+  --transition-speed: 0.2s;
+  --transition-timing: ease-in-out;
+
+  /* Colores específicos de la app (Tema Claro) */
+  --color-space-occupied-bg: #fff5f5;
+  --color-space-occupied-border: #ffcccc;
+}
+
+/* Variables para el Tema Oscuro */
+[data-bs-theme='dark'] {
+  /* Sobrescribimos los colores de Bootstrap y los nuestros */
+  --bs-body-bg: #1a1a1a;
+  --bs-body-color: #e9ecef;
+
+  --color-primary: #3d8bfd;
+  --color-light-gray: #212529;
+  --color-medium-gray: #495057;
+  --color-dark-gray: #e9ecef;
+  --color-hover-light-blue: #2c3035;
+  --color-white: #343a40; /* Color de fondo para tarjetas/tablas */
+
+  --shadow-base: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.5);
+  --shadow-hover: 0 0.5rem 1rem rgba(0, 0, 0, 0.7);
+
+  /* Colores específicos de la app (Tema Oscuro) */
+  --color-space-occupied-bg: #4d2222;
+  --color-space-occupied-border: #803333;
+}

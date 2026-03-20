@@ -1,25 +1,134 @@
-.navbar {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.navbar-premium {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    background: rgba(15, 23, 42, 0.85);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+    padding: 0.8rem 1.5rem;
+    margin: 1rem 1rem 2rem 1rem;
+    border-radius: 1rem;
+    position: sticky;
+    top: 1rem;
+    z-index: 1030;
+}
+
+[data-bs-theme='light'] .navbar-premium {
+    background: rgba(255, 255, 255, 0.85);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+}
+
+.brand-wrapper {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+}
+
+.brand-text {
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: transparent;
+    letter-spacing: -0.015em;
+}
+
+.logo-navbar {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .nav-link {
-  transition: color 0.2s ease-in-out;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.6rem 1rem !important;
+    border-radius: 0.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--text-muted) !important;
+    position: relative;
+    margin: 0 0.2rem;
 }
 
 .nav-link:hover {
-  color: rgba(255, 255, 255, 0.9) !important;
+    color: var(--text-main) !important;
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .nav-link.active {
-  font-weight: 600;
-  color: #fff !important;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+    color: var(--primary) !important;
+    background: rgba(79, 70, 229, 0.1);
 }
 
-@media (max-width: 991px) {
-  .nav-link.active {
-    border-bottom: none;
-    border-left: 3px solid #fff;
-    padding-left: 10px;
-  }
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 20%;
+    right: 20%;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 10px;
+}
+
+.btn-logout {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+}
+
+.btn-logout:hover {
+    background: #ef4444;
+    color: white;
+    border-color: #ef4444;
+}
+
+@media (max-width: 991.98px) {
+    .navbar-premium {
+        margin: 0;
+        border-radius: 0;
+        top: 0;
+        padding: 0.6rem 1rem;
+    }
+    
+    .brand-text {
+        font-size: 1.1rem; /* Smaller on mobile */
+    }
+
+    .logo-navbar {
+        height: 32px !important; /* Smaller logo on mobile */
+    }
+
+    .navbar-collapse {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .navbar-toggler {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: var(--primary) !important;
+        border-radius: 0.75rem !important;
+        transition: all 0.3s ease;
+    }
+
+    .navbar-toggler:active, .navbar-toggler:focus {
+        background: var(--primary) !important;
+        color: white !important;
+    }
+
+    .nav-link.active::after {
+        display: none;
+    }
+    
+    .nav-link.active {
+        border-left: 3px solid var(--primary);
+        border-radius: 0 0.5rem 0.5rem 0;
+        padding-left: 1.5rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .brand-text {
+        display: none; /* Only show logo on very small devices */
+    }
 }

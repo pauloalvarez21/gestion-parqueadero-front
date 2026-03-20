@@ -17,6 +17,9 @@ interface Ticket {
   espacio: {
     codigo: string;
   };
+  creadoPor: string;
+  finalizadoPor: string;
+  numeroFactura: string;
 }
 
 @Component({

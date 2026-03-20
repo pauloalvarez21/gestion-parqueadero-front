@@ -10,6 +10,7 @@ import { StatisticsComponent } from './statistics/statistics';
 import { ActiveTicketsComponent } from './active-tickets/active-tickets';
 import { VehiclesComponent } from './active-tickets/vehicles';
 import { ExitRegistrationComponent } from './exit/exit';
+import { BillingConfigComponent } from './billing-config/billing-config';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -23,5 +24,6 @@ export const routes: Routes = [
   { path: 'statistics', component: StatisticsComponent },
   { path: 'tickets', component: ActiveTicketsComponent },
   { path: 'vehicles', component: VehiclesComponent },
+  { path: 'billing', component: BillingConfigComponent },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
 ];
