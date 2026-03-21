@@ -25,6 +25,14 @@ export class HomeComponent implements OnInit {
   // Lista de acciones disponibles en el dashboard
   private readonly allActions: Action[] = [
     {
+      title: 'Dashboard',
+      icon: 'bi-grid-1x2-fill',
+      description: 'Ver vista general del estado del parqueadero.',
+      link: '/dashboard',
+      color: 'text-primary',
+      allowedRoles: ['ADMIN', 'OPERADOR', 'USER'],
+    },
+    {
       title: 'Registrar Entrada',
       icon: 'bi-box-arrow-in-right',
       description: 'Registrar el ingreso de un vehículo al parqueadero.',
@@ -81,28 +89,12 @@ export class HomeComponent implements OnInit {
       allowedRoles: ['ADMIN', 'OPERADOR'],
     },
     {
-      title: 'Estadísticas',
-      icon: 'bi-bar-chart-line-fill',
-      description: 'Ver estadísticas de ocupación e ingresos.',
-      link: '/statistics',
-      color: 'text-dark',
-      allowedRoles: ['ADMIN'],
-    },
-    {
       title: 'Historial de Tickets',
       icon: 'bi-clock-history',
       description: 'Consultar el historial de todos los tickets finalizados.',
       link: '/history',
       color: 'text-muted',
       allowedRoles: ['ADMIN'],
-    },
-    {
-      title: 'Documentación API',
-      icon: 'bi-file-earmark-code',
-      description: 'Consultar la documentación técnica del sistema.',
-      link: '/docs',
-      color: 'text-secondary',
-      allowedRoles: ['ADMIN', 'OPERADOR', 'USER'],
     },
     {
       title: 'Facturación',

@@ -71,9 +71,9 @@ export class MenuComponent implements OnInit {
       allowedRoles: ['ADMIN'],
     },
     {
-      title: 'Estadísticas',
-      icon: 'bi-bar-chart-line-fill',
-      link: '/statistics',
+      title: 'Dashboard',
+      icon: 'bi-grid-1x2-fill',
+      link: '/dashboard',
       allowedRoles: ['ADMIN'],
     },
     {
@@ -81,12 +81,6 @@ export class MenuComponent implements OnInit {
       icon: 'bi-file-earmark-text',
       link: '/billing',
       allowedRoles: ['ADMIN'],
-    },
-    {
-      title: 'Docs',
-      icon: 'bi-file-earmark-code',
-      link: '/docs',
-      allowedRoles: ['ADMIN', 'OPERADOR', 'USER'],
     },
   ];
 
