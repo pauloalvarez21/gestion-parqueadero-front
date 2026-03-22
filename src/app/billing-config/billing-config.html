@@ -21,6 +21,11 @@
               <input type="text" id="numeroResolucion" class="form-control" formControlName="numeroResolucion" placeholder="Ej: 187640000001">
             </div>
 
+            <div class="mb-3">
+              <label for="nitEmpresa" class="form-label fw-semibold text-muted">NIT Empresa</label>
+              <input type="text" id="nitEmpresa" class="form-control" formControlName="nitEmpresa" placeholder="Ej: 900.123.456-7">
+            </div>
+
             <div class="row mb-3">
               <div class="col-md-6">
                 <label for="fechaResolucion" class="form-label fw-semibold text-muted">Fecha Resolución</label>
@@ -101,6 +106,11 @@
 
           <div *ngIf="activeResolucion" class="list-group list-group-flush">
             <div class="list-group-item px-0 border-0 mb-3">
+              <label class="small text-muted text-uppercase fw-bold">NIT Empresa:</label>
+              <p class="fs-5 mb-0 fw-bold">{{ activeResolucion.nitEmpresa }}</p>
+            </div>
+
+            <div class="list-group-item px-0 border-0 mb-3">
               <label class="small text-muted text-uppercase fw-bold">Número DIAN:</label>
               <p class="fs-5 mb-0 fw-bold">{{ activeResolucion.numeroResolucion }}</p>
             </div>
@@ -139,13 +149,13 @@
             </div>
 
             <!-- Dashboard Usage -->
-             <div class="mt-5">
+             <div class="mt-5" *ngIf="activeResolucion">
               <div class="d-flex justify-content-between mb-1">
                 <span class="small text-muted">Consumo de numeración:</span>
                 <span class="small fw-bold">{{ (activeResolucion.numeroActual / activeResolucion.numeroHasta * 100) | number:'1.0-1' }}%</span>
               </div>
               <div class="progress" style="height: 10px;">
-                <div class="progress-bar progress-bar-striped" role="progressbar" 
+                <div class="progress-bar progress-bar-striped" role="progressbar"
                   [style.width.%]="(activeResolucion.numeroActual / activeResolucion.numeroHasta * 100)"
                   [class.bg-danger]="(activeResolucion.numeroActual / activeResolucion.numeroHasta * 100) > 90">
                 </div>

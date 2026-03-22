@@ -15,6 +15,7 @@ interface ResolucionFactura {
   fechaFin: string;
   activa: boolean;
   mensajePiePagina: string;
+  nitEmpresa: string;
 }
 
 @Component({
@@ -46,6 +47,7 @@ export class BillingConfigComponent implements OnInit {
       fechaInicio: ['', Validators.required],
       fechaFin: ['', Validators.required],
       mensajePiePagina: [''],
+      nitEmpresa: ['', Validators.required],
     });
   }
 
