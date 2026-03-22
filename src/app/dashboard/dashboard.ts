@@ -4,10 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { environment } from '../../environments/environment.development';
-import localeEs from '@angular/common/locales/es';
-import { registerLocaleData } from '@angular/common';
-
-registerLocaleData(localeEs);
 
 export interface Estadisticas {
   vehiculosActivos: number;
@@ -49,7 +45,7 @@ export class DashboardComponent implements OnInit {
   stats: Estadisticas | null = null;
   spaces: Espacio[] = [];
   history: Historial[] = [];
-  
+
   isLoading = false;
   errorMessage = '';
   today = new Date();
@@ -61,12 +57,12 @@ export class DashboardComponent implements OnInit {
   refresh() {
     this.isLoading = true;
     this.errorMessage = '';
-    
+
     // Combinar llamadas a endpoints
     forkJoin({
       stats: this.http.get<Estadisticas>(`${environment.baseUrl}/parqueadero/estadisticas`),
       spaces: this.http.get<Espacio[]>(`${environment.baseUrl}/parqueadero/espacios`),
-      history: this.http.get<Historial[]>(`${environment.baseUrl}/parqueadero/historial`)
+      history: this.http.get<Historial[]>(`${environment.baseUrl}/parqueadero/historial`),
     }).subscribe({
       next: (result) => {
         this.stats = result.stats;
@@ -75,7 +71,7 @@ export class DashboardComponent implements OnInit {
         this.history = result.history
           .sort((a, b) => new Date(b.horaEntrada).getTime() - new Date(a.horaEntrada).getTime())
           .slice(0, 8);
-        
+
         this.isLoading = false;
         this.cdr.detectChanges();
       },
@@ -84,7 +80,7 @@ export class DashboardComponent implements OnInit {
         this.errorMessage = 'No se pudieron sincronizar los datos del parqueadero.';
         this.isLoading = false;
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 

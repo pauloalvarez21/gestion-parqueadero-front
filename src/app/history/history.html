@@ -1,0 +1,59 @@
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold text-dark">Historial de Tickets</h2>
+      <p class="text-muted">Consulta el historial de todos los tickets finalizados.</p>
+    </div>
+    <button class="btn btn-outline-primary" (click)="loadHistory()">
+      <i class="bi bi-arrow-clockwise"></i> Actualizar
+    </button>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <div class="card shadow-sm" *ngIf="!isLoading && !errorMessage">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Placa</th>
+            <th>Espacio</th>
+            <th>Hora Entrada</th>
+            <th>Hora Salida</th>
+            <th>Duración</th>
+            <th class="text-end">Valor Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let record of history">
+            <td>{{ record.id }}</td>
+            <td>
+              <span class="badge bg-light text-dark border">{{ record.placaVehiculo }}</span>
+            </td>
+            <td>
+              <span class="badge bg-info text-dark">{{ record.codigoEspacio }}</span>
+            </td>
+            <td>{{ record.horaEntrada | date: 'short' }}</td>
+            <td>{{ record.horaSalida | date: 'short' }}</td>
+            <td>{{ record.duracionMinutos }} min</td>
+            <td class="text-end fw-bold">${{ record.valorTotal | number: '1.0-0' }}</td>
+          </tr>
+          <tr *ngIf="history.length === 0">
+            <td colspan="7" class="text-center py-4 text-muted">
+              No hay registros en el historial.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

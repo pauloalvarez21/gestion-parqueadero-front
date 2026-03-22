@@ -59,21 +59,22 @@ export class VehiclesComponent implements OnInit {
   onPlacaChange(placa: string) {
     this.newVehicle.placa = placa.toUpperCase();
     if (this.newVehicle.placa.length >= 6) {
-      this.http.get<Vehiculo>(`${environment.baseUrl}/vehiculos/${this.newVehicle.placa}`)
+      this.http
+        .get<Vehiculo>(`${environment.baseUrl}/vehiculos/${this.newVehicle.placa}`)
         .subscribe({
           next: (vehiculo) => {
             if (vehiculo) {
               console.log('Vehículo existente encontrado:', vehiculo);
               this.newVehicle = { ...vehiculo };
               this.successMessage = 'Datos cargados de un vehículo existente.';
-              setTimeout(() => this.successMessage = '', 3000);
+              setTimeout(() => (this.successMessage = ''), 3000);
               this.cdr.detectChanges();
             }
           },
           error: () => {
             // No hacer nada si no se encuentra (es un vehículo nuevo)
             console.log('Vehículo no encontrado, es un nuevo registro.');
-          }
+          },
         });
     }
   }
@@ -118,8 +119,11 @@ export class VehiclesComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    const obs = this.newVehicle.id 
-      ? this.http.put<Vehiculo>(`${environment.baseUrl}/vehiculos/${this.newVehicle.id}`, this.newVehicle)
+    const obs = this.newVehicle.id
+      ? this.http.put<Vehiculo>(
+          `${environment.baseUrl}/vehiculos/${this.newVehicle.id}`,
+          this.newVehicle
+        )
       : this.http.post<Vehiculo>(`${environment.baseUrl}/vehiculos`, this.newVehicle);
 
     obs.subscribe({

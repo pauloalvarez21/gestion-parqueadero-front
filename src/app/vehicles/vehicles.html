@@ -61,18 +61,28 @@
           <tr *ngFor="let vehicle of paginatedVehicles" class="animate-fade-in">
             <td class="fw-bold">{{ vehicle.placa }}</td>
             <td>
-              <span class="badge" [ngClass]="{
-                'bg-primary': vehicle.tipo === 'CARRO',
-                'bg-info': vehicle.tipo === 'MOTO',
-                'bg-secondary': vehicle.tipo === 'BICICLETA'
-              }">{{ vehicle.tipo }}</span>
+              <span
+                class="badge"
+                [ngClass]="{
+                  'bg-primary': vehicle.tipo === 'CARRO',
+                  'bg-info': vehicle.tipo === 'MOTO',
+                  'bg-secondary': vehicle.tipo === 'BICICLETA'
+                }"
+                >{{ vehicle.tipo }}</span
+              >
             </td>
             <td>{{ vehicle.marca || 'N/A' }}</td>
             <td>{{ vehicle.modelo || 'N/A' }}</td>
             <td>{{ vehicle.nombrePropietario || 'N/A' }}</td>
             <td>{{ vehicle.telefonoPropietario || 'N/A' }}</td>
             <td class="text-end">
-              <button class="btn btn-sm btn-outline-primary rounded-circle p-2" (click)="editVehicle(vehicle)" data-bs-toggle="modal" data-bs-target="#addVehicleModal" title="Editar">
+              <button
+                class="btn btn-sm btn-outline-primary rounded-circle p-2"
+                (click)="editVehicle(vehicle)"
+                data-bs-toggle="modal"
+                data-bs-target="#addVehicleModal"
+                title="Editar"
+              >
                 <i class="bi bi-pencil-square"></i>
               </button>
             </td>
@@ -90,17 +100,35 @@
         <nav aria-label="Page navigation">
           <ul class="pagination pagination-sm mb-0">
             <li class="page-item" [class.disabled]="currentPage === 1">
-              <a class="page-item"><button class="page-link" (click)="setPage(currentPage - 1)" [disabled]="currentPage === 1">
-                <i class="bi bi-chevron-left"></i>
-              </button></a>
+              <a class="page-item"
+                ><button
+                  class="page-link"
+                  (click)="setPage(currentPage - 1)"
+                  [disabled]="currentPage === 1"
+                >
+                  <i class="bi bi-chevron-left"></i>
+                </button></a
+              >
             </li>
-            <li class="page-item" *ngFor="let p of [].constructor(totalPages); let i = index" [class.active]="currentPage === i + 1">
-              <a class="page-item"><button class="page-link" (click)="setPage(i + 1)">{{ i + 1 }}</button></a>
+            <li
+              class="page-item"
+              *ngFor="let p of [].constructor(totalPages); let i = index"
+              [class.active]="currentPage === i + 1"
+            >
+              <a class="page-item"
+                ><button class="page-link" (click)="setPage(i + 1)">{{ i + 1 }}</button></a
+              >
             </li>
             <li class="page-item" [class.disabled]="currentPage === totalPages">
-              <a class="page-item"><button class="page-link" (click)="setPage(currentPage + 1)" [disabled]="currentPage === totalPages">
-                <i class="bi bi-chevron-right"></i>
-              </button></a>
+              <a class="page-item"
+                ><button
+                  class="page-link"
+                  (click)="setPage(currentPage + 1)"
+                  [disabled]="currentPage === totalPages"
+                >
+                  <i class="bi bi-chevron-right"></i>
+                </button></a
+              >
             </li>
           </ul>
         </nav>
@@ -109,30 +137,49 @@
   </div>
 
   <!-- Estado vacío -->
-  <div *ngIf="!isLoading && vehicles.length === 0 && !errorMessage" class="text-center py-5 text-muted">
+  <div
+    *ngIf="!isLoading && vehicles.length === 0 && !errorMessage"
+    class="text-center py-5 text-muted"
+  >
     <i class="bi bi-car-front fs-1 d-block mb-3"></i>
     <p>No se encontraron vehículos. ¡Registra el primero!</p>
   </div>
 </div>
 
 <!-- Modal para Agregar Vehículo -->
-<div class="modal fade" id="addVehicleModal" tabindex="-1" aria-labelledby="addVehicleModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="addVehicleModal"
+  tabindex="-1"
+  aria-labelledby="addVehicleModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title fw-bold" id="addVehicleModalLabel">{{ newVehicle.id ? 'Editar' : 'Registrar Nuevo' }} Vehículo</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title fw-bold" id="addVehicleModalLabel">
+          {{ newVehicle.id ? 'Editar' : 'Registrar Nuevo' }} Vehículo
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
         <form (ngSubmit)="addVehicle()">
           <div class="mb-3">
             <label for="placa" class="form-label">Placa</label>
-            <input type="text"
-                   class="form-control text-uppercase"
-                   id="placa"
-                   name="placa"
-                   [ngModel]="newVehicle.placa"
-                   (ngModelChange)="onPlacaChange($event)" required />
+            <input
+              type="text"
+              class="form-control text-uppercase"
+              id="placa"
+              name="placa"
+              [ngModel]="newVehicle.placa"
+              (ngModelChange)="onPlacaChange($event)"
+              required
+            />
           </div>
           <div class="mb-3">
             <label for="tipo" class="form-label">Tipo de Vehículo</label>
@@ -144,22 +191,51 @@
           </div>
           <div class="mb-3">
             <label for="marca" class="form-label">Marca (Opcional)</label>
-            <input type="text" class="form-control" id="marca" name="marca" [(ngModel)]="newVehicle.marca" />
+            <input
+              type="text"
+              class="form-control"
+              id="marca"
+              name="marca"
+              [(ngModel)]="newVehicle.marca"
+            />
           </div>
           <div class="mb-3">
             <label for="modelo" class="form-label">Modelo (Opcional)</label>
-            <input type="text" class="form-control" id="modelo" name="modelo" [(ngModel)]="newVehicle.modelo" />
+            <input
+              type="text"
+              class="form-control"
+              id="modelo"
+              name="modelo"
+              [(ngModel)]="newVehicle.modelo"
+            />
           </div>
           <div class="mb-3">
             <label for="nombrePropietario" class="form-label">Propietario (Opcional)</label>
-            <input type="text" class="form-control" id="nombrePropietario" name="nombrePropietario" [(ngModel)]="newVehicle.nombrePropietario" />
+            <input
+              type="text"
+              class="form-control"
+              id="nombrePropietario"
+              name="nombrePropietario"
+              [(ngModel)]="newVehicle.nombrePropietario"
+            />
           </div>
           <div class="mb-3">
             <label for="telefonoPropietario" class="form-label">Teléfono (Opcional)</label>
-            <input type="text" class="form-control" id="telefonoPropietario" name="telefonoPropietario" [(ngModel)]="newVehicle.telefonoPropietario" />
+            <input
+              type="text"
+              class="form-control"
+              id="telefonoPropietario"
+              name="telefonoPropietario"
+              [(ngModel)]="newVehicle.telefonoPropietario"
+            />
           </div>
           <button type="submit" class="btn btn-primary w-100" [disabled]="isLoading">
-            <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span
+              *ngIf="isLoading"
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
             <span *ngIf="!isLoading">Registrar</span>
           </button>
         </form>
