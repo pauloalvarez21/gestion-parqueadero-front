@@ -1,87 +1,95 @@
-<div class="container py-5">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <h2 class="fw-bold text-dark">Gestión de Vehículos</h2>
-      <p class="text-muted">Busca, visualiza y registra nuevos vehículos.</p>
+<div class="vehicles-container p-4">
+  <div class="row mb-5 animate-fade-in">
+    <div class="col-md-8">
+      <h1 class="fw-extrabold mb-1">Gestión de Vehículos</h1>
+      <p class="text-muted fs-5">Busca, visualiza y registra nuevos vehículos registrados en el sistema.</p>
     </div>
-    <div>
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addVehicleModal">
-        <i class="bi bi-plus-lg me-2"></i>Registrar Vehículo
+    <div class="col-md-4 d-flex align-items-center justify-content-md-end">
+      <button class="btn btn-primary d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#addVehicleModal">
+        <i class="bi bi-plus-lg"></i> Registrar Vehículo
       </button>
     </div>
   </div>
 
-  <!-- Barra de Búsqueda -->
-  <div class="mb-4">
-    <div class="input-group">
-      <span class="input-group-text"><i class="bi bi-search"></i></span>
-      <input
-        type="text"
-        class="form-control text-uppercase"
-        placeholder="Buscar por placa..."
-        [ngModel]="searchPlaca"
-        (ngModelChange)="searchPlaca = $event?.toUpperCase(); loadVehicles()"
-      />
+  <!-- Barra de Búsqueda Glass -->
+  <div class="search-card animate-fade-in">
+    <div class="row align-items-center">
+      <div class="col-md-12">
+        <div class="input-group input-group-lg border-0 shadow-none">
+          <span class="input-group-text bg-transparent border-0 text-muted ps-0"><i class="bi bi-search fs-4"></i></span>
+          <input
+            type="text"
+            class="form-control bg-transparent border-0 shadow-none text-uppercase fw-semibold"
+            placeholder="Escribe la placa para buscar..."
+            [ngModel]="searchPlaca"
+            (ngModelChange)="searchPlaca = $event?.toUpperCase(); loadVehicles()"
+          />
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Mensaje de Error -->
-  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+  <!-- Mensajes -->
+  <div *ngIf="errorMessage" class="alert alert-danger glass-panel border-danger text-danger mb-4 animate-fade-in" role="alert">
     <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorMessage }}
   </div>
 
-  <!-- Mensaje de Éxito -->
-  <div *ngIf="successMessage" class="alert alert-success" role="alert">
+  <div *ngIf="successMessage" class="alert alert-success glass-panel border-success text-success mb-4 animate-fade-in" role="alert">
     <i class="bi bi-check-circle-fill me-2"></i> {{ successMessage }}
   </div>
 
   <!-- Indicador de Carga -->
   <div *ngIf="isLoading && vehicles.length === 0" class="text-center py-5">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Cargando...</span>
+    <div class="loading-overlay">
+        <div class="premium-spinner"></div>
     </div>
   </div>
 
   <!-- Tabla de Vehículos -->
-  <div *ngIf="vehicles.length > 0" class="card shadow-sm">
+  <div *ngIf="vehicles.length > 0" class="card glass-panel animate-slide-up">
     <div class="table-responsive">
-      <table class="table table-hover table-striped mb-0">
-        <thead class="table-light">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
           <tr>
-            <th scope="col">Placa</th>
-            <th scope="col">Tipo</th>
-            <th scope="col">Marca</th>
-            <th scope="col">Modelo</th>
-            <th scope="col">Propietario</th>
-            <th scope="col">Teléfono</th>
-            <th scope="col" class="text-end">Acciones</th>
+            <th class="ps-4">Placa</th>
+            <th>Tipo</th>
+            <th>Detalles</th>
+            <th>Propietario</th>
+            <th>Contacto</th>
+            <th class="text-end pe-4">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let vehicle of paginatedVehicles" class="animate-fade-in">
-            <td class="fw-bold">{{ vehicle.placa }}</td>
+          <tr *ngFor="let vehicle of paginatedVehicles">
+            <td class="ps-4">
+              <span class="badge-plate shadow-sm">{{ vehicle.placa }}</span>
+            </td>
             <td>
               <span
-                class="badge"
+                class="badge px-3 py-2"
                 [ngClass]="{
-                  'bg-primary': vehicle.tipo === 'CARRO',
-                  'bg-info': vehicle.tipo === 'MOTO',
-                  'bg-secondary': vehicle.tipo === 'BICICLETA'
+                  'bg-primary-subtle text-primary border border-primary-subtle': vehicle.tipo === 'CARRO',
+                  'bg-info-subtle text-info border border-info-subtle': vehicle.tipo === 'MOTO',
+                  'bg-secondary-subtle text-secondary border border-secondary-subtle': vehicle.tipo === 'BICICLETA'
                 }"
-                >{{ vehicle.tipo }}</span
               >
+                <i class="bi" [class.bi-car-front]="vehicle.tipo === 'CARRO'" [class.bi-bicycle]="vehicle.tipo === 'MOTO'"></i>
+                {{ vehicle.tipo }}
+              </span>
             </td>
-            <td>{{ vehicle.marca || 'N/A' }}</td>
-            <td>{{ vehicle.modelo || 'N/A' }}</td>
-            <td>{{ vehicle.nombrePropietario || 'N/A' }}</td>
-            <td>{{ vehicle.telefonoPropietario || 'N/A' }}</td>
-            <td class="text-end">
+            <td>
+                <div class="fw-bold text-main">{{ vehicle.marca || '---' }}</div>
+                <div class="text-muted small">{{ vehicle.modelo || 'Sin modelo' }}</div>
+            </td>
+            <td class="fw-semibold">{{ vehicle.nombrePropietario || 'Anónimo' }}</td>
+            <td class="text-muted small">{{ vehicle.telefonoPropietario || '---' }}</td>
+            <td class="text-end pe-4">
               <button
-                class="btn btn-sm btn-outline-primary rounded-circle p-2"
+                class="btn btn-sm btn-outline-primary rounded-circle"
+                style="width: 32px; height: 32px; padding: 0;"
                 (click)="editVehicle(vehicle)"
                 data-bs-toggle="modal"
                 data-bs-target="#addVehicleModal"
-                title="Editar"
               >
                 <i class="bi bi-pencil-square"></i>
               </button>
@@ -91,44 +99,24 @@
       </table>
     </div>
 
-    <!-- Paginador -->
-    <div class="card-footer bg-white border-top-0 py-3">
+    <!-- Paginador Premium -->
+    <div class="card-footer bg-transparent border-top-0 py-4 px-4">
       <div class="d-flex justify-content-between align-items-center flex-wrap">
-        <div class="text-muted small mb-2 mb-sm-0">
-          Mostrando {{ paginatedVehicles.length }} de {{ vehicles.length }} vehículos
+        <div class="text-muted small">
+          Mostrando <span class="fw-bold text-main">{{ paginatedVehicles.length }}</span> de <span class="fw-bold text-main">{{ vehicles.length }}</span> vehículos
         </div>
-        <nav aria-label="Page navigation">
-          <ul class="pagination pagination-sm mb-0">
+        <nav>
+          <ul class="pagination pagination-sm mb-0 gap-2">
             <li class="page-item" [class.disabled]="currentPage === 1">
-              <a class="page-item"
-                ><button
-                  class="page-link"
-                  (click)="setPage(currentPage - 1)"
-                  [disabled]="currentPage === 1"
-                >
-                  <i class="bi bi-chevron-left"></i>
-                </button></a
-              >
+              <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" (click)="setPage(currentPage - 1)" [disabled]="currentPage === 1">
+                <i class="bi bi-chevron-left me-1"></i> Anterior
+              </button>
             </li>
-            <li
-              class="page-item"
-              *ngFor="let p of [].constructor(totalPages); let i = index"
-              [class.active]="currentPage === i + 1"
-            >
-              <a class="page-item"
-                ><button class="page-link" (click)="setPage(i + 1)">{{ i + 1 }}</button></a
-              >
-            </li>
+            
             <li class="page-item" [class.disabled]="currentPage === totalPages">
-              <a class="page-item"
-                ><button
-                  class="page-link"
-                  (click)="setPage(currentPage + 1)"
-                  [disabled]="currentPage === totalPages"
-                >
-                  <i class="bi bi-chevron-right"></i>
-                </button></a
-              >
+              <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" (click)="setPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                Siguiente <i class="bi bi-chevron-right ms-1"></i>
+              </button>
             </li>
           </ul>
         </nav>
@@ -137,109 +125,79 @@
   </div>
 
   <!-- Estado vacío -->
-  <div
-    *ngIf="!isLoading && vehicles.length === 0 && !errorMessage"
-    class="text-center py-5 text-muted"
-  >
-    <i class="bi bi-car-front fs-1 d-block mb-3"></i>
-    <p>No se encontraron vehículos. ¡Registra el primero!</p>
+  <div *ngIf="!isLoading && vehicles.length === 0 && !errorMessage" class="text-center py-5 animate-fade-in">
+    <div class="card glass-panel p-5 mx-auto" style="max-width: 500px;">
+        <i class="bi bi-search fs-1 d-block mb-3 opacity-25"></i>
+        <h4 class="fw-bold">No se encontraron vehículos</h4>
+        <p class="text-muted mb-4">No hay resultados para la búsqueda actual o no hay vehículos registrados.</p>
+        <button class="btn btn-primary px-4" data-bs-toggle="modal" data-bs-target="#addVehicleModal">Registrar el Primero</button>
+    </div>
   </div>
 </div>
 
-<!-- Modal para Agregar Vehículo -->
-<div
-  class="modal fade"
-  id="addVehicleModal"
-  tabindex="-1"
-  aria-labelledby="addVehicleModalLabel"
-  aria-hidden="true"
->
+<!-- Modal para Agregar Vehículo (Styled) -->
+<div class="modal fade" id="addVehicleModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title fw-bold" id="addVehicleModalLabel">
-          {{ newVehicle.id ? 'Editar' : 'Registrar Nuevo' }} Vehículo
-        </h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+    <div class="modal-content glass-panel border-0 shadow-lg" style="border-radius: var(--radius-lg);">
+      <div class="modal-header border-0 pb-0">
+        <h3 class="modal-title fw-extrabold" id="addVehicleModalLabel">
+          {{ newVehicle.id ? 'Editar' : 'Registrar' }} Vehículo
+        </h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body p-4">
         <form (ngSubmit)="addVehicle()">
-          <div class="mb-3">
-            <label for="placa" class="form-label">Placa</label>
+          <div class="mb-4">
+            <label class="form-label fw-bold small text-uppercase tracking-wider">Número de Placa</label>
             <input
               type="text"
-              class="form-control text-uppercase"
-              id="placa"
+              class="form-control form-control-lg text-uppercase fw-bold"
+              placeholder="Ej: ABC-123"
               name="placa"
               [ngModel]="newVehicle.placa"
               (ngModelChange)="onPlacaChange($event)"
               required
             />
           </div>
-          <div class="mb-3">
-            <label for="tipo" class="form-label">Tipo de Vehículo</label>
-            <select class="form-select" id="tipo" name="tipo" [(ngModel)]="newVehicle.tipo">
-              <option value="CARRO">Carro</option>
-              <option value="MOTO">Moto</option>
-              <option value="BICICLETA">Bicicleta</option>
-            </select>
+
+          <div class="row g-3 mb-4">
+            <div class="col-6">
+                <label class="form-label fw-bold small text-uppercase">Tipo</label>
+                <select class="form-select" name="tipo" [(ngModel)]="newVehicle.tipo">
+                  <option value="CARRO">Carro</option>
+                  <option value="MOTO">Moto</option>
+                  <option value="BICICLETA">Bicicleta</option>
+                </select>
+            </div>
+            <div class="col-6">
+                <label class="form-label fw-bold small text-uppercase">Marca</label>
+                <input type="text" class="form-control" name="marca" [(ngModel)]="newVehicle.marca" placeholder="Ej: Toyota" />
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="marca" class="form-label">Marca (Opcional)</label>
-            <input
-              type="text"
-              class="form-control"
-              id="marca"
-              name="marca"
-              [(ngModel)]="newVehicle.marca"
-            />
+
+          <div class="mb-4">
+            <label class="form-label fw-bold small text-uppercase">Propietario</label>
+            <input type="text" class="form-control" name="nombrePropietario" [(ngModel)]="newVehicle.nombrePropietario" placeholder="Nombre completo" />
           </div>
-          <div class="mb-3">
-            <label for="modelo" class="form-label">Modelo (Opcional)</label>
-            <input
-              type="text"
-              class="form-control"
-              id="modelo"
-              name="modelo"
-              [(ngModel)]="newVehicle.modelo"
-            />
+
+          <div class="row g-3 mb-4">
+            <div class="col-6">
+                <label class="form-label fw-bold small text-uppercase">Modelo</label>
+                <input type="text" class="form-control" name="modelo" [(ngModel)]="newVehicle.modelo" placeholder="Ej: 2024" />
+            </div>
+            <div class="col-6">
+                <label class="form-label fw-bold small text-uppercase">Teléfono</label>
+                <input type="text" class="form-control" name="telefonoPropietario" [(ngModel)]="newVehicle.telefonoPropietario" placeholder="Número celular" />
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="nombrePropietario" class="form-label">Propietario (Opcional)</label>
-            <input
-              type="text"
-              class="form-control"
-              id="nombrePropietario"
-              name="nombrePropietario"
-              [(ngModel)]="newVehicle.nombrePropietario"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="telefonoPropietario" class="form-label">Teléfono (Opcional)</label>
-            <input
-              type="text"
-              class="form-control"
-              id="telefonoPropietario"
-              name="telefonoPropietario"
-              [(ngModel)]="newVehicle.telefonoPropietario"
-            />
-          </div>
-          <button type="submit" class="btn btn-primary w-100" [disabled]="isLoading">
-            <span
-              *ngIf="isLoading"
-              class="spinner-border spinner-border-sm"
-              role="status"
-              aria-hidden="true"
-            ></span>
-            <span *ngIf="!isLoading">Registrar</span>
+
+          <button type="submit" class="btn btn-primary btn-lg w-100 mt-2 py-3" [disabled]="isLoading">
+            <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+            {{ newVehicle.id ? 'Actualizar Vehículo' : 'Registrar Ahora' }}
           </button>
         </form>
       </div>
     </div>
   </div>
 </div>
+

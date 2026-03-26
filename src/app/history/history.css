@@ -1,35 +1,50 @@
-/* Animación suave para las tarjetas */
+.history-container {
+    padding: 2rem;
+    animation: fadeIn 0.6s ease-out;
+}
+
 .card {
-  transition: all 0.3s ease;
-  border: none;
+    border: none;
+    background: var(--bg-card);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-md);
 }
 
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-}
-
-/* Estilos de la tabla */
 .table th {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: #555;
+  color: var(--text-muted);
+  font-weight: 700;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid var(--border-glass);
 }
 
 .table td {
   vertical-align: middle;
+  padding: 1rem;
+  color: var(--text-main);
+  border-bottom: 1px solid var(--border-glass);
 }
 
-/* Badges personalizados */
 .badge {
-  font-weight: 500;
-  padding: 0.5em 0.75em;
+  font-weight: 700;
+  padding: 0.5em 1em;
+  border-radius: 2rem;
 }
 
-/* Spinner */
-.spinner-border {
-  width: 3rem;
-  height: 3rem;
+.badge-success {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
 }
+
+.badge-warning {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+}
+
+/* Custom shadow for premium feel */
+.table-responsive {
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+

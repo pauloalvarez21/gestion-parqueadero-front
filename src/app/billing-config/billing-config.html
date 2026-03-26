@@ -1,167 +1,172 @@
-<div class="container py-5">
-  <div class="row mb-4">
-    <div class="col">
-      <h2 class="fw-bold text-dark"><i class="bi bi-file-earmark-text me-2"></i>Facturación DIAN</h2>
-      <p class="text-muted">Configura la resolución oficial de numeración para facturación electrónica.</p>
+<div class="billing-config-container p-4">
+  <div class="row mb-5 animate-fade-in text-center">
+    <div class="col-12">
+      <h1 class="fw-extrabold mb-1">Configuración DIAN de Facturación</h1>
+      <p class="text-muted fs-5">Controla las resoluciones de numeración oficial y cumplimiento legal.</p>
     </div>
   </div>
 
-  <div class="row g-4">
+  <div class="row g-4 justify-content-center">
     <!-- Columna Izquierda: Formulario -->
-    <div class="col-lg-6">
-      <div class="card shadow-sm border-0">
-        <div class="card-header bg-info text-white p-3">
-          <h5 class="mb-0"><i class="bi bi-gear-fill me-2"></i>Configurar Resolución</h5>
+    <div class="col-xl-6 col-lg-7 animate-slide-up">
+      <div class="card glass-panel border-0 shadow-lg overflow-hidden">
+        <div class="bg-info p-4 text-white d-flex align-items-center">
+          <i class="bi bi-gear-wide-connected fs-3 me-3"></i>
+          <h3 class="mb-0 fw-bold">Parámetros de Resolución</h3>
         </div>
         <div class="card-body p-4">
           <form [formGroup]="configForm" (ngSubmit)="onSubmit()">
             
-            <div class="mb-3">
-              <label for="numeroResolucion" class="form-label fw-semibold text-muted">Número de Resolución</label>
-              <input type="text" id="numeroResolucion" class="form-control" formControlName="numeroResolucion" placeholder="Ej: 187640000001">
+            <div class="row g-3 mb-4">
+                <div class="col-md-7">
+                    <label class="form-label small fw-extrabold text-uppercase text-muted">Número de Resolución</label>
+                    <input type="text" class="form-control form-control-lg" formControlName="numeroResolucion" placeholder="Ej: 187640000001">
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label small fw-extrabold text-uppercase text-muted">NIT Empresa</label>
+                    <input type="text" class="form-control form-control-lg" formControlName="nitEmpresa" placeholder="Ej: 900.123.456-7">
+                </div>
             </div>
 
-            <div class="mb-3">
-              <label for="nitEmpresa" class="form-label fw-semibold text-muted">NIT Empresa</label>
-              <input type="text" id="nitEmpresa" class="form-control" formControlName="nitEmpresa" placeholder="Ej: 900.123.456-7">
-            </div>
-
-            <div class="row mb-3">
+            <div class="row g-3 mb-4">
               <div class="col-md-6">
-                <label for="fechaResolucion" class="form-label fw-semibold text-muted">Fecha Resolución</label>
-                <input type="date" id="fechaResolucion" class="form-control" formControlName="fechaResolucion">
+                <label class="form-label small fw-extrabold text-uppercase text-muted">Fecha Resolución</label>
+                <input type="date" class="form-control" formControlName="fechaResolucion">
               </div>
               <div class="col-md-6">
-                <label for="prefijo" class="form-label fw-semibold text-muted">Prefijo (Opcional)</label>
-                <input type="text" id="prefijo" class="form-control" formControlName="prefijo" placeholder="Ej: PRK">
+                <label class="form-label small fw-extrabold text-uppercase text-muted">Prefijo Oficial</label>
+                <input type="text" class="form-control" formControlName="prefijo" placeholder="Ej: PRK">
               </div>
             </div>
 
-            <div class="row mb-3">
+            <div class="row g-3 mb-4">
               <div class="col-md-4">
-                <label for="numeroDesde" class="form-label fw-semibold text-muted">Desde</label>
-                <input type="number" id="numeroDesde" class="form-control" formControlName="numeroDesde">
-              </div>
-              <div class="col-md-4">
-                <label for="numeroHasta" class="form-label fw-semibold text-muted">Hasta</label>
-                <input type="number" id="numeroHasta" class="form-control" formControlName="numeroHasta">
+                <label class="form-label small fw-extrabold text-uppercase text-muted">Rango Desde</label>
+                <input type="number" class="form-control fw-bold" formControlName="numeroDesde">
               </div>
               <div class="col-md-4">
-                <label for="numeroActual" class="form-label fw-semibold text-muted">Actual (Siguiente)</label>
-                <input type="number" id="numeroActual" class="form-control" formControlName="numeroActual">
+                <label class="form-label small fw-extrabold text-uppercase text-muted">Rango Hasta</label>
+                <input type="number" class="form-control fw-bold" formControlName="numeroHasta">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-extrabold text-uppercase text-muted">Próximo Nro.</label>
+                <input type="number" class="form-control fw-bold border-info text-info" formControlName="numeroActual">
               </div>
             </div>
 
-            <div class="row mb-3">
+            <div class="row g-3 mb-4">
               <div class="col-md-6">
-                <label for="fechaInicio" class="form-label fw-semibold text-muted">Fecha Inicio</label>
-                <input type="date" id="fechaInicio" class="form-control" formControlName="fechaInicio">
+                <label class="form-label small fw-extrabold text-uppercase text-muted">Válida Desde</label>
+                <input type="date" class="form-control" formControlName="fechaInicio">
               </div>
               <div class="col-md-6">
-                <label for="fechaFin" class="form-label fw-semibold text-muted">Fecha Vencimiento</label>
-                <input type="date" id="fechaFin" class="form-control" formControlName="fechaFin">
+                <label class="form-label small fw-extrabold text-uppercase text-muted">Fecha Vencimiento</label>
+                <input type="date" class="form-control" formControlName="fechaFin">
               </div>
             </div>
 
-            <div class="mb-3">
-              <label for="mensajePiePagina" class="form-label fw-semibold text-muted">Mensaje Pie de Factura</label>
-              <textarea id="mensajePiePagina" class="form-control" formControlName="mensajePiePagina" rows="3" placeholder="Mensaje oficial habilitado por DIAN..."></textarea>
+            <div class="mb-4">
+              <label class="form-label small fw-extrabold text-uppercase text-muted">Renglón Informativo (Pie de Factura)</label>
+              <textarea class="form-control" formControlName="mensajePiePagina" rows="3" placeholder="Ej: Factura generada por computador según resolución..."></textarea>
             </div>
 
-            <div *ngIf="successMessage" class="alert alert-success d-flex align-items-center mb-3">
-              <i class="bi bi-check-circle-fill me-2 fs-5"></i>
-              <div>{{ successMessage }}</div>
+            <div *ngIf="successMessage" class="alert alert-success glass-panel text-success border-success mb-4 animate-fade-in shadow-sm">
+              <i class="bi bi-check-circle-fill me-2 fs-5"></i> <strong>Guardado:</strong> {{ successMessage }}
             </div>
 
-            <div *ngIf="errorMessage" class="alert alert-danger mb-3">
-              <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
-              <div>{{ errorMessage }}</div>
+            <div *ngIf="errorMessage" class="alert alert-danger glass-panel text-danger border-danger mb-4 animate-fade-in shadow-sm">
+              <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i> <strong>Error:</strong> {{ errorMessage }}
             </div>
 
-            <div class="d-grid mt-4">
-              <button type="submit" class="btn btn-info btn-lg text-white" [disabled]="isLoading || configForm.invalid">
+            <button type="submit" class="btn btn-info btn-lg w-100 py-3 text-white fw-bold shadow-sm" [disabled]="isLoading || configForm.invalid">
                 <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
-                <i *ngIf="!isLoading" class="bi bi-save me-2"></i>
-                {{ isLoading ? 'Guardando...' : 'Aplicar Configuración' }}
-              </button>
-            </div>
+                <i *ngIf="!isLoading" class="bi bi-shield-lock-fill me-2"></i>
+                {{ isLoading ? 'Aplicando Cambios...' : 'Validar y Guardar Resolución' }}
+            </button>
           </form>
         </div>
       </div>
     </div>
 
-    <!-- Columna Derecha: Vista Actual -->
-    <div class="col-lg-6">
-      <div class="card shadow-sm border-0 h-100">
-        <div class="card-header bg-white p-3 d-flex justify-content-between align-items-center">
-          <h5 class="mb-0 text-muted fw-bold"><i class="bi bi-info-circle-fill me-2"></i>Estado de Resolución</h5>
-          <span *ngIf="activeResolucion?.activa" class="badge bg-success rounded-pill px-3 py-2">ACTIVA</span>
-          <span *ngIf="!activeResolucion?.activa" class="badge bg-danger rounded-pill px-3 py-2">SIN RESOLUCIÓN</span>
+    <!-- Columna Derecha: Vista Actual Premium -->
+    <div class="col-xl-4 col-lg-5 animate-slide-up" style="animation-delay: 0.1s;">
+      <div class="card glass-panel border-0 shadow-lg h-100">
+        <div class="card-header bg-transparent border-glass p-4 d-flex justify-content-between align-items-center">
+          <h5 class="mb-0 fw-extrabold text-main text-uppercase small tracking-wider">Estado de Resolución</h5>
+          <span *ngIf="activeResolucion?.activa" class="badge rounded-pill bg-success-subtle text-success border border-success-subtle px-3 py-2">ACTIVA</span>
+          <span *ngIf="!activeResolucion?.activa" class="badge rounded-pill bg-danger-subtle text-danger border border-danger-subtle px-3 py-2">EXPIRADA</span>
         </div>
         <div class="card-body p-4">
-          <div *ngIf="!activeResolucion" class="text-center py-5">
-            <i class="bi bi-journal-x fs-1 text-light"></i>
-            <p class="mt-3 text-muted">No se ha cargado una resolución vigente.</p>
+          <div *ngIf="!activeResolucion" class="text-center py-5 opacity-50">
+            <i class="bi bi-file-earmark-x fs-1 text-muted d-block mb-3"></i>
+            <p class="fw-bold">Sin Datos Vigentes</p>
+            <p class="small text-muted px-4">Por favor configure una resolución DIAN para habilitar la facturación de tickets.</p>
           </div>
 
-          <div *ngIf="activeResolucion" class="list-group list-group-flush">
-            <div class="list-group-item px-0 border-0 mb-3">
-              <label class="small text-muted text-uppercase fw-bold">NIT Empresa:</label>
-              <p class="fs-5 mb-0 fw-bold">{{ activeResolucion.nitEmpresa }}</p>
-            </div>
-
-            <div class="list-group-item px-0 border-0 mb-3">
-              <label class="small text-muted text-uppercase fw-bold">Número DIAN:</label>
-              <p class="fs-5 mb-0 fw-bold">{{ activeResolucion.numeroResolucion }}</p>
+          <div *ngIf="activeResolucion" class="list-group list-group-flush bg-transparent">
+            <div class="list-group-item bg-transparent px-0 border-glass mb-4">
+              <div class="row">
+                  <div class="col-md-6 mb-3 mb-md-0">
+                      <label class="small text-muted text-uppercase fw-extrabold mb-1">Empresa Emitente</label>
+                      <p class="fs-5 mb-0 fw-bold text-main">{{ activeResolucion.nitEmpresa }}</p>
+                  </div>
+                  <div class="col-md-6">
+                      <label class="small text-muted text-uppercase fw-extrabold mb-1">Nro. Resolución</label>
+                      <p class="fs-5 mb-0 fw-bold text-main">{{ activeResolucion.numeroResolucion }}</p>
+                  </div>
+              </div>
             </div>
             
-            <div class="row g-3">
-              <div class="col-6">
-                <div class="p-3 bg-light rounded shadow-sm">
-                  <label class="small text-muted text-uppercase fw-bold d-block">Numeración:</label>
-                  <span class="fs-5 fw-bold">{{ activeResolucion.prefijo }}{{ activeResolucion.numeroDesde }} - {{ activeResolucion.numeroHasta }}</span>
+            <div class="row g-3 mb-4">
+              <div class="col-6 text-center">
+                <div class="p-4 glass-panel border-glass rounded-4 shadow-sm h-100 d-flex flex-column justify-content-center">
+                  <label class="small text-muted text-uppercase fw-extrabold mb-2">Numeración</label>
+                  <span class="fs-5 fw-extrabold text-primary">{{ activeResolucion.prefijo }}{{ activeResolucion.numeroDesde }} – {{ activeResolucion.numeroHasta }}</span>
                 </div>
               </div>
-              <div class="col-6">
-                <div class="p-3 bg-light rounded shadow-sm">
-                  <label class="small text-muted text-uppercase fw-bold d-block">Siguiente Número:</label>
-                  <span class="fs-5 fw-bold text-info">{{ activeResolucion.prefijo }}{{ activeResolucion.numeroActual + 1 }}</span>
+              <div class="col-6 text-center">
+                <div class="p-4 glass-panel border-glass rounded-4 shadow-sm h-100 d-flex flex-column justify-content-center">
+                  <label class="small text-muted text-uppercase fw-extrabold mb-2">Próxima</label>
+                  <span class="fs-4 fw-extrabold text-info">{{ activeResolucion.prefijo }}{{ activeResolucion.numeroActual + 1 }}</span>
                 </div>
               </div>
             </div>
 
-            <div class="list-group-item px-0 border-0 mt-4 d-flex justify-content-between bg-white">
-              <div>
-                <label class="small text-muted text-uppercase fw-bold">Fecha Resolución:</label>
-                <p class="mb-0">{{ activeResolucion.fechaResolucion | date:'mediumDate' }}</p>
+            <div class="d-flex justify-content-between p-3 bg-light rounded-4 mb-4">
+              <div class="text-center flex-grow-1">
+                <label class="small text-muted text-uppercase fw-extrabold d-block mb-1">Fecha Emisión</label>
+                <p class="mb-0 fw-bold">{{ activeResolucion.fechaResolucion | date:'dd/MM/yyyy' }}</p>
               </div>
-              <div class="text-end">
-                <label class="small text-muted text-uppercase fw-bold">Vigencia:</label>
-                <p class="mb-0 text-danger fw-bold">{{ activeResolucion.fechaFin | date:'mediumDate' }}</p>
+              <div class="vr mx-3"></div>
+              <div class="text-center flex-grow-1">
+                <label class="small text-muted text-uppercase fw-extrabold d-block mb-1">Vence El</label>
+                <p class="mb-0 text-danger fw-extrabold">{{ activeResolucion.fechaFin | date:'dd/MM/yyyy' }}</p>
               </div>
             </div>
 
-             <div class="list-group-item px-0 border-0 mt-4 bg-white">
-                <label class="small text-muted text-uppercase fw-bold">Mensaje Pie de Página:</label>
-                <div class="p-3 border rounded font-monospace small bg-light mt-2">
-                  {{ activeResolucion.mensajePiePagina || 'No se ha configurado mensaje adicional.' }}
+             <div class="mb-4">
+                <label class="small text-muted text-uppercase fw-extrabold mb-2 d-block">Nota Informativa en Factura</label>
+                <div class="p-3 glass-panel border-glass rounded-4 small font-monospace text-muted shadow-sm">
+                  {{ activeResolucion.mensajePiePagina || 'Sin mensaje de pie de página configurado.' }}
                 </div>
             </div>
 
-            <!-- Dashboard Usage -->
-             <div class="mt-5" *ngIf="activeResolucion">
-              <div class="d-flex justify-content-between mb-1">
-                <span class="small text-muted">Consumo de numeración:</span>
-                <span class="small fw-bold">{{ (activeResolucion.numeroActual / activeResolucion.numeroHasta * 100) | number:'1.0-1' }}%</span>
+             <div class="p-4 glass-panel border-glass rounded-4 shadow-sm" *ngIf="activeResolucion">
+              <div class="d-flex justify-content-between mb-2">
+                <label class="small text-muted text-uppercase fw-extrabold">Consumo de Numeración</label>
+                <span class="small fw-extrabold" [class.text-danger]="(activeResolucion.numeroActual / activeResolucion.numeroHasta * 100) > 85">
+                    {{ (activeResolucion.numeroActual / activeResolucion.numeroHasta * 100) | number:'1.0-1' }}%
+                </span>
               </div>
-              <div class="progress" style="height: 10px;">
-                <div class="progress-bar progress-bar-striped" role="progressbar"
+              <div class="progress" style="height: 12px; border-radius: 6px;">
+                <div class="progress-bar progress-bar-animated progress-bar-striped" role="progressbar"
                   [style.width.%]="(activeResolucion.numeroActual / activeResolucion.numeroHasta * 100)"
-                  [class.bg-danger]="(activeResolucion.numeroActual / activeResolucion.numeroHasta * 100) > 90">
+                  [class.bg-danger]="(activeResolucion.numeroActual / activeResolucion.numeroHasta * 100) > 85"
+                  [class.bg-info]="(activeResolucion.numeroActual / activeResolucion.numeroHasta * 100) <= 85">
                 </div>
               </div>
-              <p class="small text-muted text-end mt-1">
-                Restan {{ activeResolucion.numeroHasta - activeResolucion.numeroActual }} números.
+              <p class="small text-muted text-center mt-3 mb-0 fw-bold">
+                 Disponibles: <span class="text-main fs-6">{{ activeResolucion.numeroHasta - activeResolucion.numeroActual }}</span> facturas restantes.
               </p>
             </div>
           </div>
@@ -170,3 +175,4 @@
     </div>
   </div>
 </div>
+

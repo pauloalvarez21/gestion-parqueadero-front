@@ -1,48 +1,40 @@
 <div class="login-page">
   <div class="login-card">
-    <div class="login-header text-center">
-      <div class="login-logo-container mb-4">
-        <img src="images/logo.png" alt="Logo" class="img-fluid login-logo-img">
+    <div class="login-header">
+      <div class="login-logo-container">
+        <img src="images/logo.png" alt="Logo" class="login-logo-img">
       </div>
-      <h2 class="fw-bold mb-1">Acceso Seguro</h2>
-      <p class="mb-0 opacity-75">Sistema de Gestión de Parqueadero</p>
+      <h2>Acceso Seguro</h2>
+      <p class="mb-0 opacity-75 small fw-bold">Gestión de Parqueo v2.0</p>
     </div>
 
     <div class="login-body">
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <div class="form-floating mb-3">
+        <div class="form-floating mb-3 shadow-sm rounded-3 overflow-hidden">
           <input
             type="text"
             class="form-control"
             id="username"
             placeholder="Usuario"
             formControlName="username"
-            [class.is-invalid]="
-              loginForm.get('username')?.invalid && loginForm.get('username')?.touched
-            "
+            [class.is-invalid]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
           />
           <label for="username">Usuario</label>
         </div>
 
-        <div class="form-floating mb-4">
+        <div class="form-floating mb-4 shadow-sm rounded-3 overflow-hidden">
           <input
             type="password"
             class="form-control"
             id="password"
             placeholder="Contraseña"
             formControlName="password"
-            [class.is-invalid]="
-              loginForm.get('password')?.invalid && loginForm.get('password')?.touched
-            "
+            [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
           />
           <label for="password">Contraseña</label>
         </div>
 
-        <div
-          *ngIf="errorMessage"
-          class="alert alert-danger py-2 small text-center mb-4"
-          role="alert"
-        >
+        <div *ngIf="errorMessage" class="alert alert-danger glass-panel text-danger border-danger py-2 small text-center mb-4 animate-fade-in">
           <i class="bi bi-exclamation-circle me-2"></i> {{ errorMessage }}
         </div>
 
@@ -52,37 +44,24 @@
           [disabled]="isLoading || loginForm.invalid"
         >
           <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
-          {{ isLoading ? 'INGRESANDO...' : 'INICIAR SESIÓN' }}
+          {{ isLoading ? 'VERIFICANDO...' : 'ENTRAR AL SISTEMA' }}
         </button>
       </form>
     </div>
   </div>
 </div>
 
-<!-- Modal de Error (Popup) -->
-<div
-  class="modal fade"
-  id="errorModal"
-  tabindex="-1"
-  aria-labelledby="errorModalLabel"
-  aria-hidden="true"
->
+<!-- Modal de Error Premium -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="errorModalLabel">Error de Inicio de Sesión</h5>
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body text-center py-4">
-        <p class="mb-0 fw-medium fs-5">{{ errorMessage }}</p>
-      </div>
-      <div class="modal-footer justify-content-center">
-        <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cerrar</button>
+    <div class="modal-content glass-panel border-0 shadow-lg" style="border-radius: var(--radius-lg);">
+      <div class="modal-body text-center p-5">
+        <div class="mb-4">
+            <i class="bi bi-shield-lock-fill text-danger" style="font-size: 3.5rem;"></i>
+        </div>
+        <h3 class="fw-extrabold mb-3">Error de Autenticación</h3>
+        <p class="text-muted mb-4">{{ errorMessage }}</p>
+        <button type="button" class="btn btn-dark w-100 py-3 rounded-pill fw-bold" data-bs-dismiss="modal">Intentar de nuevo</button>
       </div>
     </div>
   </div>

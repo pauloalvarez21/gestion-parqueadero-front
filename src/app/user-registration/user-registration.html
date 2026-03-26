@@ -1,270 +1,174 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8 col-lg-6">
-      <div class="card shadow-sm mb-4">
-        <div class="card-header bg-primary text-white">
-          <h3 class="mb-0"><i class="bi bi-person-plus-fill me-2"></i>Crear Usuario</h3>
+<div class="user-registration-container p-4">
+  <div class="row mb-5 animate-fade-in text-center">
+    <div class="col-12">
+      <h1 class="fw-extrabold mb-1">Centro de Administración de Usuarios</h1>
+      <p class="text-muted fs-5">Gestiona el acceso, roles y seguridad de los operadores del sistema.</p>
+    </div>
+  </div>
+
+  <div class="row justify-content-center g-4">
+    <!-- Card para Crear Usuario -->
+    <div class="col-xl-6 col-lg-7 animate-slide-up" style="animation-delay: 0.1s;">
+      <div class="card glass-panel border-0 shadow-lg overflow-hidden h-100">
+        <div class="bg-primary p-4 text-white d-flex align-items-center">
+          <i class="bi bi-person-plus-fill fs-3 me-3"></i>
+          <h3 class="mb-0 fw-bold">Crear Nuevo Usuario</h3>
         </div>
-        <div class="card-body">
+        <div class="card-body p-4">
           <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
-            <!-- Campo Usuario -->
-            <div class="mb-3">
-              <label for="username" class="form-label">Nombre de Usuario</label>
-              <input
-                type="text"
-                id="username"
-                class="form-control"
-                formControlName="username"
-                placeholder="Ej: operador1"
-                [class.is-invalid]="
-                  registrationForm.get('username')?.invalid &&
-                  registrationForm.get('username')?.touched
-                "
-              />
-              <div class="invalid-feedback">
-                El nombre de usuario es requerido (mínimo 4 caracteres).
+            <div class="mb-4">
+              <label class="form-label small fw-extrabold text-uppercase text-muted">Nombre de Usuario</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-person text-primary"></i></span>
+                <input
+                    type="text"
+                    class="form-control border-start-0"
+                    formControlName="username"
+                    placeholder="Ej: operador_centro"
+                    [class.is-invalid]="registrationForm.get('username')?.invalid && registrationForm.get('username')?.touched"
+                />
               </div>
+              <div class="invalid-feedback">Mínimo 4 caracteres requeridos.</div>
             </div>
 
-            <!-- Campo Contraseña -->
-            <div class="mb-3">
-              <label for="password" class="form-label">Contraseña</label>
-              <input
-                type="password"
-                id="password"
-                class="form-control"
-                formControlName="password"
-                placeholder="******"
-                [class.is-invalid]="
-                  registrationForm.get('password')?.invalid &&
-                  registrationForm.get('password')?.touched
-                "
-              />
-              <div class="invalid-feedback">La contraseña es requerida (mínimo 6 caracteres).</div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label small fw-extrabold text-uppercase text-muted">Contraseña</label>
+                    <input
+                        type="password"
+                        class="form-control"
+                        formControlName="password"
+                        placeholder="••••••"
+                        [class.is-invalid]="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched"
+                    />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small fw-extrabold text-uppercase text-muted">Confirmar</label>
+                    <input
+                        type="password"
+                        class="form-control"
+                        formControlName="confirmPassword"
+                        placeholder="••••••"
+                        [class.is-invalid]="(registrationForm.get('confirmPassword')?.invalid || registrationForm.hasError('mismatch')) && registrationForm.get('confirmPassword')?.touched"
+                    />
+                </div>
+                <div class="col-12 text-danger small mt-1" *ngIf="registrationForm.hasError('mismatch') && registrationForm.get('confirmPassword')?.touched">
+                    Las contraseñas no coinciden.
+                </div>
             </div>
 
-            <!-- Campo Confirmar Contraseña -->
-            <div class="mb-3">
-              <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
-              <input
-                type="password"
-                id="confirmPassword"
-                class="form-control"
-                formControlName="confirmPassword"
-                placeholder="******"
-                [class.is-invalid]="
-                  (registrationForm.get('confirmPassword')?.invalid ||
-                    registrationForm.hasError('mismatch')) &&
-                  registrationForm.get('confirmPassword')?.touched
-                "
-              />
-              <div class="invalid-feedback" *ngIf="registrationForm.hasError('mismatch')">
-                Las contraseñas no coinciden.
-              </div>
-            </div>
-
-            <!-- Campo Rol -->
-            <div class="mb-3">
-              <label for="role" class="form-label">Rol</label>
+            <div class="mb-4">
+              <label class="form-label small fw-extrabold text-uppercase text-muted">Asignar Rol</label>
               <select
-                id="role"
-                class="form-control"
+                class="form-select"
                 formControlName="role"
-                [class.is-invalid]="
-                  registrationForm.get('role')?.invalid && registrationForm.get('role')?.touched
-                "
+                [class.is-invalid]="registrationForm.get('role')?.invalid && registrationForm.get('role')?.touched"
               >
                 <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
               </select>
-              <div class="invalid-feedback">El rol es requerido.</div>
             </div>
 
-            <!-- Botón Submit -->
-            <div class="d-grid gap-2 mt-4">
-              <button
+            <button
                 type="submit"
-                class="btn btn-primary btn-lg"
+                class="btn btn-primary w-100 py-3 fw-bold mt-2"
                 [disabled]="isLoading || registrationForm.invalid"
-              >
-                <span
-                  *ngIf="isLoading"
-                  class="spinner-border spinner-border-sm me-2"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                {{ isLoading ? 'Procesando...' : 'Crear Usuario' }}
-              </button>
-            </div>
+            >
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                <i class="bi bi-shield-check me-2" *ngIf="!isLoading"></i>
+                {{ isLoading ? 'Procesando...' : 'Registrar Usuario Ahora' }}
+            </button>
           </form>
         </div>
       </div>
+    </div>
 
-      <!-- Card para Eliminar Usuario -->
-      <div class="card shadow-sm border-danger">
-        <div class="card-header bg-danger text-white">
-          <h3 class="mb-0"><i class="bi bi-person-dash-fill me-2"></i>Eliminar Usuario</h3>
-        </div>
-        <div class="card-body">
-          <p class="card-text">
-            Ingrese el nombre de usuario exacto que desea eliminar del sistema.
-          </p>
-
-          <div class="input-group mb-3">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Nombre de usuario (ej: operador1)"
-              #usernameInput
-            />
-            <button
-              class="btn btn-outline-danger"
-              type="button"
-              (click)="askDeleteUser()"
-              [disabled]="isDeleting"
-            >
-              <span
-                *ngIf="isDeleting"
-                class="spinner-border spinner-border-sm me-2"
-                role="status"
-                aria-hidden="true"
-              ></span>
-              <i class="bi bi-trash" *ngIf="!isDeleting"></i>
-              {{ isDeleting ? 'Eliminando...' : 'Eliminar' }}
-            </button>
-          </div>
-          <div class="form-text text-muted">
-            <i class="bi bi-info-circle"></i> Esta acción requiere confirmación y no se puede
-            deshacer.
-          </div>
-        </div>
-      </div>
-
-      <!-- Card para Gestionar Usuarios -->
-      <div class="card shadow-sm mt-4">
-        <div class="card-header bg-secondary text-white">
-          <h3 class="mb-0"><i class="bi bi-people-fill me-2"></i>Gestionar Usuarios</h3>
-        </div>
-        <div class="card-body">
-          <div *ngIf="users.length === 0; else userTable" class="text-center text-muted py-3">
-            <p>No hay usuarios para mostrar o están cargando...</p>
-          </div>
-
-          <ng-template #userTable>
-            <div class="table-responsive">
-              <table class="table table-striped table-hover align-middle">
-                <thead>
-                  <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Usuario</th>
-                    <th scope="col">Rol Actual</th>
-                    <th scope="col" class="text-center">Cambiar Rol</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let user of users" class="animate-fade-in">
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.username }}</td>
-                    <td>
-                      <span
-                        class="badge"
-                        [ngClass]="{
-                          'bg-danger': user.role === 'ADMIN',
-                          'bg-warning text-dark': user.role === 'OPERADOR',
-                          'bg-success': user.role === 'USER',
-                        }"
-                      >
-                        {{ user.role }}
-                      </span>
-                    </td>
-                    <td class="text-center">
-                      <select
-                        class="form-select form-select-sm w-auto mx-auto"
-                        (change)="changeRole(user.username, $any($event).target.value)"
-                      >
-                        <option value="" selected disabled>ROL</option>
-                        <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
-                      </select>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+    <!-- Gestión y Eliminación Lateral -->
+    <div class="col-xl-4 col-lg-5">
+      <div class="row g-4">
+        <!-- Card para Eliminar -->
+        <div class="col-12 animate-slide-up" style="animation-delay: 0.2s;">
+            <div class="card glass-panel border-0 border-top border-5 border-danger shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold text-danger mb-3 d-flex align-items-center">
+                        <i class="bi bi-person-x-fill fs-4 me-2"></i>
+                        Eliminar Usuario
+                    </h5>
+                    <p class="text-muted small mb-4">Esta acción borrará permanentemente todo el acceso del usuario.</p>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Nombre de usuario" #usernameInput />
+                        <button class="btn btn-danger px-3" type="button" (click)="askDeleteUser()" [disabled]="isDeleting">
+                            <i class="bi bi-trash" *ngIf="!isDeleting"></i>
+                            <span *ngIf="isDeleting" class="spinner-border spinner-border-sm"></span>
+                        </button>
+                    </div>
+                </div>
             </div>
-          </ng-template>
+        </div>
+
+        <!-- Listado Rápido / Resumen -->
+        <div class="col-12 animate-slide-up" style="animation-delay: 0.3s;">
+            <div class="card glass-panel border-0 shadow-sm overflow-hidden">
+                <div class="card-header bg-dark text-white py-3">
+                    <h5 class="mb-0 fw-bold small text-uppercase">Usuarios del Sistema</h5>
+                </div>
+                <div class="list-group list-group-flush" *ngIf="users.length > 0">
+                    <div *ngFor="let user of users" class="list-group-item bg-transparent d-flex justify-content-between align-items-center py-3 border-glass">
+                        <div>
+                            <div class="fw-bold text-main">{{ user.username }}</div>
+                            <div class="small text-muted">ID: #{{ user.id }}</div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge" [ngClass]="{
+                                'bg-danger-subtle text-danger border border-danger-subtle': user.role === 'ADMIN',
+                                'bg-warning-subtle text-warning border border-warning-subtle': user.role === 'OPERADOR',
+                                'bg-success-subtle text-success border border-success-subtle': user.role === 'USER'
+                            }">{{ user.role }}</span>
+                            
+                            <select class="form-select form-select-sm" style="width: 100px;" (change)="changeRole(user.username, $any($event).target.value)">
+                                <option value="" selected disabled>Rol</option>
+                                <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="users.length === 0" class="p-4 text-center text-muted">
+                    No hay usuarios registrados.
+                </div>
+            </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal de Información (Popup) -->
-  <div
-    class="modal fade"
-    id="infoModal"
-    tabindex="-1"
-    aria-labelledby="infoModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div
-          class="modal-header"
-          [ngClass]="isError ? 'bg-danger text-white' : 'bg-success text-white'"
-        >
-          <h5 class="modal-title" id="infoModalLabel">
-            <i
-              class="bi"
-              [ngClass]="isError ? 'bi-exclamation-triangle-fill' : 'bi-check-circle-fill'"
-            ></i>
-            {{ isError ? 'Error' : 'Éxito' }}
-          </h5>
-          <button
-            type="button"
-            class="btn-close btn-close-white"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          {{ modalMessage }}
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+  <!-- Modals Modernos -->
+  <div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content glass-panel border-0 shadow-lg">
+        <div class="modal-body p-5 text-center">
+            <div class="mb-4">
+                <i class="bi fs-1" [ngClass]="isError ? 'bi-x-circle text-danger' : 'bi-check-circle text-success'"></i>
+            </div>
+            <h3 class="fw-bold mb-3">{{ isError ? 'Ocurrió un Problema' : '¡Acción Exitosa!' }}</h3>
+            <p class="text-muted mb-4">{{ modalMessage }}</p>
+            <button type="button" class="btn btn-dark w-100 py-3" data-bs-dismiss="modal">Entendido</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal de Confirmación de Eliminación -->
   <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header bg-warning text-dark">
-          <h5 class="modal-title">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>Confirmar Eliminación
-          </h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <p>
-            ¿Está seguro de que desea eliminar el usuario <strong>{{ pendingDeleteUser }}</strong
-            >?
-          </p>
-          <p class="text-danger small mb-0">Esta acción no se puede deshacer.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button
-            type="button"
-            class="btn btn-danger"
-            data-bs-dismiss="modal"
-            (click)="confirmDelete()"
-          >
-            Sí, eliminar
-          </button>
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content glass-panel border-0 shadow-lg" style="border-radius: var(--radius-lg);">
+        <div class="modal-body p-4 text-center">
+          <div class="text-warning mb-3">
+              <i class="bi bi-exclamation-triangle-fill" style="font-size: 4rem;"></i>
+          </div>
+          <h3 class="fw-bold mb-2">Confirmar Eliminación</h3>
+          <p class="text-muted mb-4">¿Estás seguro que deseas eliminar a <strong>{{ pendingDeleteUser }}</strong>?<br>Esta acción deshabilitará su acceso de inmediato.</p>
+          <div class="d-flex gap-3">
+              <button type="button" class="btn btn-light w-100 py-3 border" data-bs-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-danger w-100 py-3" data-bs-dismiss="modal" (click)="confirmDelete()">Sí, Eliminar</button>
+          </div>
         </div>
       </div>
     </div>

@@ -1,38 +1,56 @@
-<div class="container py-5">
+<div class="exit-container p-4">
+  <div class="row mb-5 animate-fade-in text-center no-print">
+    <div class="col-12">
+      <h1 class="fw-extrabold mb-1">Finalización de Estadía</h1>
+      <p class="text-muted fs-5">Calcula el tiempo de permanencia y genera el comprobante de pago oficial.</p>
+    </div>
+  </div>
 
-  <!-- Formulario de Salida (Solo visible si no hay pago procesado) -->
-  <div *ngIf="!payment" class="row justify-content-center no-print">
-    <div class="col-md-6">
-      <div class="card shadow-sm">
-        <div class="card-header bg-danger text-white">
-          <h4 class="mb-0"><i class="bi bi-box-arrow-left me-2"></i>Registrar Salida</h4>
+  <!-- Formulario de Salida Premium -->
+  <div *ngIf="!payment" class="row justify-content-center no-print animate-slide-up">
+    <div class="col-xl-5 col-lg-7">
+      <div class="card glass-panel border-0 shadow-lg overflow-hidden">
+        <div class="bg-danger p-4 text-white d-flex align-items-center">
+          <i class="bi bi-box-arrow-left fs-3 me-3"></i>
+          <h3 class="mb-0 fw-bold">Liquidar Ticket</h3>
         </div>
         <div class="card-body p-4">
           <form (ngSubmit)="registerExit()">
-            <div class="mb-3">
-              <label for="codigoTicket" class="form-label">Código del Ticket</label>
-              <input type="text" class="form-control" id="codigoTicket" [(ngModel)]="request.codigoTicket" name="codigoTicket" placeholder="Ej. TKT-12345">
+            <div class="mb-4">
+              <label class="form-label small fw-extrabold text-uppercase text-muted">Código de Ticket</label>
+              <div class="input-group input-group-lg shadow-sm rounded-3 overflow-hidden">
+                <span class="input-group-text bg-white border-end-0"><i class="bi bi-qr-code text-danger"></i></span>
+                <input type="text" class="form-control border-start-0 fw-bold" [(ngModel)]="request.codigoTicket" name="codigoTicket" placeholder="Ej: TKT-12345">
+              </div>
             </div>
 
-            <div class="text-center my-2 text-muted">- O -</div>
-
-            <div class="mb-3">
-              <label for="placa" class="form-label">Placa del Vehículo</label>
-              <input type="text" class="form-control text-uppercase" id="placa" [ngModel]="request.placa" (ngModelChange)="request.placa=$event?.toUpperCase()" name="placa" placeholder="Ej. AAA-123">
+            <div class="d-flex align-items-center my-4 opacity-50">
+              <hr class="flex-grow-1">
+              <span class="mx-3 fw-bold small text-uppercase">O Buscar por Placa</span>
+              <hr class="flex-grow-1">
             </div>
 
-            <div class="mb-3">
-              <label for="observaciones" class="form-label">Observaciones (Opcional)</label>
-              <textarea class="form-control" id="observaciones" [(ngModel)]="request.observaciones" name="observaciones" rows="2"></textarea>
+            <div class="mb-4">
+              <label class="form-label small fw-extrabold text-uppercase text-muted">Número de Placa</label>
+              <div class="input-group input-group-lg shadow-sm rounded-3 overflow-hidden">
+                <span class="input-group-text bg-white border-end-0"><i class="bi bi-credit-card-2-front text-danger"></i></span>
+                <input type="text" class="form-control border-start-0 text-uppercase fw-extrabold tracking-wider" [ngModel]="request.placa" (ngModelChange)="request.placa=$event?.toUpperCase()" name="placa" placeholder="ABC-123">
+              </div>
             </div>
 
-            <div *ngIf="errorMessage" class="alert alert-danger">
-              {{ errorMessage }}
+            <div class="mb-4">
+              <label class="form-label small fw-extrabold text-uppercase text-muted">Novedades / Observaciones</label>
+              <textarea class="form-control" [(ngModel)]="request.observaciones" name="observaciones" rows="2" placeholder="Opcional..."></textarea>
             </div>
 
-            <button type="submit" class="btn btn-danger w-100" [disabled]="isLoading">
-              <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
-              {{ isLoading ? 'Procesando...' : 'Calcular y Registrar Salida' }}
+            <div *ngIf="errorMessage" class="alert alert-danger glass-panel border-danger text-danger mb-4 animate-fade-in shadow-sm">
+                <i class="bi bi-exclamation-octagon-fill me-2 fs-5"></i> {{ errorMessage }}
+            </div>
+
+            <button type="submit" class="btn btn-danger btn-lg w-100 py-3 fw-bold mt-2 shadow" [disabled]="isLoading">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                <i class="bi bi-calculator-fill fs-4 me-2" *ngIf="!isLoading"></i>
+                {{ isLoading ? 'Liquidando Cuenta...' : 'Calcular Total y Salir' }}
             </button>
           </form>
         </div>
@@ -40,81 +58,100 @@
     </div>
   </div>
 
-  <!-- Vista del Recibo (Visible cuando hay pago) -->
-  <div *ngIf="payment" class="row justify-content-center">
-    <div class="col-md-5">
+  <!-- Vista del Recibo Premium -->
+  <div *ngIf="payment" class="row justify-content-center animate-slide-up">
+    <div class="col-xl-5 col-lg-6">
 
-      <!-- El Recibo Imprimible -->
-      <div class="card shadow receipt-container mb-4">
-        <div class="card-body p-5">
-          <div class="text-center mb-4 border-bottom pb-3">
-            <i class="bi bi-p-square-fill fs-1 text-primary"></i>
-            <h3 class="fw-bold mt-2">Recibo de Pago</h3>
-            <p class="text-muted mb-0">{{ payment.codigoTicket }}</p>
-            <p *ngIf="payment.numeroFactura" class="fw-bold text-dark mt-1">Factura N°: {{ payment.numeroFactura }}</p>
-          </div>
-
-          <div class="row mb-2">
-            <div class="col-6 text-muted">Entrada:</div>
-            <div class="col-6 text-end">{{ payment.horaEntrada | date:'short' }}</div>
-          </div>
-          <div class="row mb-2">
-            <div class="col-6 text-muted">Salida:</div>
-            <div class="col-6 text-end">{{ payment.horaSalida | date:'short' }}</div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-6 text-muted">Duración:</div>
-            <div class="col-6 text-end fw-bold">{{ payment.duracionHoras }}h {{ payment.duracionMinutos }}m</div>
-          </div>
-
-          <div class="border-top border-bottom py-3 my-3 bg-light">
-            <div class="row mb-1">
-              <div class="col-6">Valor Base:</div>
-              <div class="col-6 text-end">{{ payment.valorBase | currency:'COP':'symbol-narrow':'1.0-0' }}</div>
-            </div>
-            <div class="row mb-1" *ngIf="payment.valorAdicional">
-              <div class="col-6">Adicional:</div>
-              <div class="col-6 text-end">{{ payment.valorAdicional | currency:'COP':'symbol-narrow':'1.0-0' }}</div>
-            </div>
-            <div class="row mb-1 text-success" *ngIf="payment.descuento">
-              <div class="col-6">Descuento:</div>
-              <div class="col-6 text-end">- {{ payment.descuento | currency:'COP':'symbol-narrow':'1.0-0' }}</div>
+      <!-- Comprobante Estilo Premium -->
+      <div class="card glass-panel border-0 shadow-2xl receipt-card mb-5 overflow-hidden">
+        <div class="bg-dark p-4 text-center text-white position-relative">
+            <div class="mb-2"><i class="bi bi-shield-check fs-1 text-success"></i></div>
+            <h4 class="fw-extrabold mb-1">COMPROBANTE DE PAGO</h4>
+            <p class="small text-muted mb-0 opacity-75">Sistema Transaccional de Parqueo</p>
+            
+            <!-- Decoraciones de Ticket -->
+            <div class="position-absolute start-0 translate-middle-x bg-white rounded-circle" style="width: 30px; height: 30px; bottom: -15px; background: inherit; border: 1px solid rgba(255,255,255,0.1);"></div>
+            <div class="position-absolute end-0 translate-middle-x bg-white rounded-circle" style="width: 30px; height: 30px; bottom: -15px; background: inherit; border: 1px solid rgba(255,255,255,0.1);"></div>
+        </div>
+        
+        <div class="card-body p-4 p-md-5">
+          <div class="text-center mb-5 mt-2">
+            <h6 class="text-muted text-uppercase fw-extrabold small tracking-widest mb-2">Referencia de Pago</h6>
+            <h2 class="fw-extrabold text-main mb-0">{{ payment.codigoTicket }}</h2>
+            <div *ngIf="payment.numeroFactura" class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 mt-2 fs-6">
+                Factura Nro. {{ payment.numeroFactura }}
             </div>
           </div>
 
-          <div class="row align-items-center">
-            <div class="col-6 fs-5">Total a Pagar:</div>
-            <div class="col-6 text-end fs-3 fw-bold text-success">
-              {{ payment.valorTotal | currency:'COP':'symbol-narrow':'1.0-0' }}
+          <div class="receipt-details">
+            <div class="border-glass rounded-4 p-4 bg-light bg-opacity-50 mb-4 shadow-sm">
+                <div class="row mb-3">
+                  <div class="col-6 text-muted fw-bold small text-uppercase">Fecha Entrada</div>
+                  <div class="col-6 text-end fw-extrabold text-main">{{ payment.horaEntrada | date:'dd/MM/yy hh:mm a' }}</div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-6 text-muted fw-bold small text-uppercase">Fecha Salida</div>
+                  <div class="col-6 text-end fw-extrabold text-main">{{ payment.horaSalida | date:'dd/MM/yy hh:mm a' }}</div>
+                </div>
+                <div class="row mb-0">
+                  <div class="col-6 text-muted fw-bold small text-uppercase">Duración Total</div>
+                  <div class="col-6 text-end fw-extrabold fs-5 text-primary">{{ payment.duracionHoras }}h {{ payment.duracionMinutos }}m</div>
+                </div>
             </div>
-          </div>
 
-          <div class="mt-4 text-center text-muted small">
-            <p class="mb-0">{{ payment.mensaje }}</p>
-            <p *ngIf="payment.finalizadoPor" class="mb-0">Atendido por: {{ payment.finalizadoPor }}</p>
-            <p>¡Gracias por su visita!</p>
+            <div class="p-4 rounded-4 border-glass mb-4 shadow-sm">
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-muted fw-bold">Subtotal Base</span>
+                  <span class="fw-bold fs-6">{{ payment.valorBase | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2" *ngIf="payment.valorAdicional">
+                  <span class="text-muted fw-bold">Incrementos/Adic.</span>
+                  <span class="text-danger fw-bold">+ {{ payment.valorAdicional | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-0 text-success" *ngIf="payment.descuento">
+                  <span class="fw-bold">Descuentos Aplicados</span>
+                  <span class="fw-bold">- {{ payment.descuento | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+                </div>
+            </div>
+
+            <div class="bg-success-subtle p-4 rounded-4 border-glass d-flex justify-content-between align-items-center mb-4 shadow-sm border border-success-subtle">
+              <span class="fs-4 fw-extrabold text-success">TOTAL PAGADO</span>
+              <span class="fs-2 fw-extrabold text-success">
+                {{ payment.valorTotal | currency:'COP':'symbol-narrow':'1.0-0' }}
+              </span>
+            </div>
+
+            <div class="text-center p-3 opacity-75">
+                <div class="mb-1 fw-bold text-muted small text-uppercase">Atendido Por</div>
+                <p class="mb-0 fw-extrabold text-main fs-6">{{ payment.finalizadoPor || 'Sistema Automático' }}</p>
+            </div>
           </div>
         </div>
-      </div>
-
-      <!-- Botones de Acción (No se imprimen) -->
-      <div class="d-grid gap-2 no-print">
-        <button class="btn btn-dark" (click)="printReceipt()">
-          <i class="bi bi-printer-fill me-2"></i> Imprimir Recibo
-        </button>
-        <div class="btn-group">
-          <button class="btn btn-outline-primary" (click)="sendEmail()">
-            <i class="bi bi-envelope-fill me-2"></i> Enviar Correo
-          </button>
-          <button class="btn btn-outline-success" (click)="sendWhatsApp()">
-            <i class="bi bi-whatsapp me-2"></i> Enviar WhatsApp
-          </button>
+        
+        <div class="card-footer bg-light p-4 text-center border-0 no-print">
+            <div class="d-grid gap-3">
+                <button class="btn btn-dark btn-lg py-3 fw-bold shadow-sm" (click)="printReceipt()">
+                  <i class="bi bi-printer-fill me-2 fs-5"></i> Imprimir Comprobante
+                </button>
+                <div class="row g-2">
+                    <div class="col-6">
+                        <button class="btn btn-outline-primary w-100 py-2 fw-bold" (click)="sendEmail()">
+                          <i class="bi bi-envelope-at me-2"></i> Email
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn btn-outline-success w-100 py-2 fw-bold" (click)="sendWhatsApp()">
+                          <i class="bi bi-whatsapp me-2"></i> WhatsApp
+                        </button>
+                    </div>
+                </div>
+                <button class="btn btn-link text-muted mt-3 fw-bold" (click)="reset()">
+                  <i class="bi bi-arrow-left me-2"></i> Realizar Nueva Operación
+                </button>
+            </div>
         </div>
-        <button class="btn btn-link text-muted mt-2" (click)="reset()">
-          Registrar Nueva Salida
-        </button>
       </div>
-
     </div>
   </div>
 </div>
+
