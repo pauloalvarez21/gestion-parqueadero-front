@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
+import JsBarcode from 'jsbarcode';
 
 declare var bootstrap: any;
 
@@ -71,6 +72,28 @@ export class EntryRegistrationComponent {
           next: (response) => {
             this.isLoading = false;
             this.ticket = response; // Guardamos el ticket para mostrarlo
+            
+            // Abrir modal e imprimir el código de barras después de un breve delay
+            setTimeout(() => {
+                const element = document.getElementById('barcodeSVG');
+                if (element && this.ticket.codigo) {
+                    JsBarcode(element, this.ticket.codigo, {
+                        format: "CODE128",
+                        displayValue: true,
+                        fontSize: 16,
+                        margin: 10,
+                        width: 2,
+                        height: 50
+                    });
+                }
+                const modalElement = document.getElementById('ticketModal');
+                if (modalElement) {
+                    const modal = new bootstrap.Modal(modalElement);
+                    modal.show();
+                    this.cdr.detectChanges();
+                }
+            }, 100);
+
             this.entryForm.reset({
               tipoVehiculo: 'CARRO',
               tipoTarifa: 'POR_MINUTO'
@@ -99,5 +122,75 @@ export class EntryRegistrationComponent {
     } else {
       this.entryForm.markAllAsTouched();
     }
+  }
+
+  // Método opcional si el usuario cierra el modal y quiere volver a verlo desde el panel lateral
+  openTicketModal() {
+      setTimeout(() => {
+          const element = document.getElementById('barcodeSVG');
+          if (element && this.ticket && this.ticket.codigo) {
+              JsBarcode(element, this.ticket.codigo, {
+                  format: "CODE128",
+                  displayValue: true,
+                  fontSize: 16,
+                  margin: 10,
+                  width: 2,
+                  height: 50
+              });
+          }
+          const modalElement = document.getElementById('ticketModal');
+          if (modalElement) {
+              // Buscar primero si ya existe la instancia, si no, crearla
+              const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+              modal.show();
+              this.cdr.detectChanges();
+          }
+      }, 50);
+  }
+
+  printTicket() {
+      const printArea = document.getElementById('printableTicket');
+      if (printArea) {
+          const printWindow = window.open('', '_blank', 'width=400,height=600');
+          if (printWindow) {
+              const content = printArea.outerHTML;
+              printWindow.document.open();
+              printWindow.document.write(`
+                  <html>
+                      <head>
+                          <title>Impresión de Ticket</title>
+                          <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+                          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+                          <style>
+                              body { 
+                                background: white; 
+                                padding: 0; 
+                                margin: 0; 
+                                font-family: monospace; 
+                                display: flex;
+                                justify-content: center;
+                              }
+                              #printableTicket { 
+                                width: 80mm; 
+                                margin: 0; 
+                                padding: 5mm; 
+                                color: black;
+                                text-align: center;
+                              }
+                              .d-print-none { display: none !important; }
+                              hr { border-color: black !important; opacity: 1 !important; }
+                              @media print {
+                                  @page { margin: 0; size: auto; }
+                              }
+                          </style>
+                      </head>
+                      <body onload="setTimeout(function(){ window.print(); window.close(); }, 500)">
+                          ${content}
+                      </body>
+                  </html>
+              `);
+              printWindow.document.close();
+          }
+      }
   }
 }

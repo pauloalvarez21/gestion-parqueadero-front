@@ -20,7 +20,7 @@
               <label class="form-label small fw-extrabold text-uppercase text-muted">Código de Ticket</label>
               <div class="input-group input-group-lg shadow-sm rounded-3 overflow-hidden">
                 <span class="input-group-text bg-white border-end-0"><i class="bi bi-qr-code text-danger"></i></span>
-                <input type="text" class="form-control border-start-0 fw-bold" [(ngModel)]="request.codigoTicket" name="codigoTicket" placeholder="Ej: TKT-12345">
+                <input type="text" #ticketInput autofocus class="form-control border-start-0 fw-bold" [(ngModel)]="request.codigoTicket" name="codigoTicket" placeholder="Ej: TKT-12345" autocomplete="off">
               </div>
             </div>
 

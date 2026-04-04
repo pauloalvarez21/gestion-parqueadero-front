@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -33,7 +33,9 @@ interface PagoResponse {
   templateUrl: './exit.html',
   styleUrl: './exit.css',
 })
-export class ExitRegistrationComponent {
+export class ExitRegistrationComponent implements AfterViewInit {
+  @ViewChild('ticketInput') ticketInput!: ElementRef<HTMLInputElement>;
+
   private http = inject(HttpClient);
   private cdr = inject(ChangeDetectorRef);
 
@@ -44,6 +46,18 @@ export class ExitRegistrationComponent {
   payment: PagoResponse | null = null;
   isLoading = false;
   errorMessage = '';
+
+  ngAfterViewInit() {
+      this.focusInput();
+  }
+
+  focusInput() {
+      setTimeout(() => {
+          if (this.ticketInput && this.ticketInput.nativeElement) {
+              this.ticketInput.nativeElement.focus();
+          }
+      }, 100);
+  }
 
   registerExit() {
     console.log('Intentando registrar salida...', this.request);
@@ -104,8 +118,12 @@ export class ExitRegistrationComponent {
 
   reset() {
     this.payment = null;
-    this.request = { observaciones: '' };
+    this.request = { observaciones: '', codigoTicket: '', placa: '' };
     this.errorMessage = '';
     this.cdr.detectChanges();
+    // Allow view to render the form again before focusing
+    setTimeout(() => {
+        this.focusInput();
+    }, 50);
   }
 }

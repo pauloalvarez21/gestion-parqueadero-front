@@ -115,7 +115,10 @@
                 <div class="position-absolute end-0 translate-middle-x bg-white rounded-circle" style="width: 24px; height: 24px; top: 50%;"></div>
             </div>
 
-            <button class="btn btn-outline-secondary w-100 py-3 fw-bold rounded-4" (click)="ticket = null">
+            <button class="btn btn-outline-success w-100 py-3 fw-bold rounded-4 mb-3 shadow-sm" (click)="openTicketModal()">
+                <i class="bi bi-printer me-2 fs-5"></i> Imprimir Ticket
+            </button>
+            <button class="btn btn-secondary w-100 py-3 fw-bold rounded-4 shadow-sm" (click)="ticket = null">
                 <i class="bi bi-plus-circle me-2"></i> Nuevo Registro
             </button>
         </div>
@@ -125,7 +128,7 @@
 </div>
 
 <!-- Modal de Error Premium -->
-<div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content glass-panel border-0 shadow-lg" style="border-radius: var(--radius-lg);">
       <div class="modal-body text-center p-5">
@@ -135,6 +138,62 @@
         <h2 class="fw-extrabold mb-3">Acceso Denegado</h2>
         <p class="text-muted fs-5 mb-4">{{ errorMessage }}</p>
         <button type="button" class="btn btn-dark btn-lg w-100 py-3 rounded-pill fw-bold" data-bs-dismiss="modal">Entendido</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Ticket para Impresión -->
+<div class="modal fade" id="ticketModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content shadow-lg border-0" style="border-radius: var(--radius-lg);">
+      <div class="modal-body p-0">
+        
+        <!-- Área imprimible del ticket -->
+        <div id="printableTicket" class="p-4 bg-white text-dark text-center" style="font-family: monospace;">
+            <div class="mb-3">
+                <img src="images/logo.png" alt="Logo Parqueadero" class="img-fluid mb-2 mx-auto" style="max-height: 60px;">
+                <h4 class="fw-bold mb-0 mt-2">PARQUEADERO</h4>
+                <div class="small fw-bold">Gestión de Parqueo v2.0</div>
+            </div>
+            
+            <hr class="border-dark border-2 border-dashed opacity-50 mb-3">
+            
+            <div class="fw-bold fs-3 mb-1 text-uppercase">{{ ticket?.vehiculo?.placa }}</div>
+            <div class="small fw-bold mb-3">{{ ticket?.vehiculo?.tipo }}</div>
+            
+            <div class="row text-start mb-3 g-2 small fw-bold">
+                <div class="col-6">INGRESO:</div>
+                <div class="col-6 text-end">{{ ticket?.horaEntrada | date:'dd/MM/yyyy' }}</div>
+                <div class="col-6">HORA:</div>
+                <div class="col-6 text-end">{{ ticket?.horaEntrada | date:'HH:mm:ss' }}</div>
+                <div class="col-6">ESPACIO:</div>
+                <div class="col-6 text-end border border-dark rounded text-center">{{ ticket?.espacio?.codigo }}</div>
+                <div class="col-6">TARIFA:</div>
+                <div class="col-6 text-end">{{ ticket?.tipoTarifa?.replace('_', ' ') }}</div>
+            </div>
+            
+            <hr class="border-dark border-2 border-dashed opacity-50 mb-3">
+            
+            <!-- Código de Barras -->
+            <div class="mb-3 text-center">
+                <svg id="barcodeSVG" class="img-fluid"></svg>
+            </div>
+            
+            <div class="small fw-bold" style="font-size: 0.75rem;">Conserve este ticket.<br>La empresa no se responsabiliza por objetos dejados en el vehículo.</div>
+            
+            <!-- Corte de ticket decorativo -->
+            <div class="d-print-none text-muted mt-3 pt-3 border-top border-secondary border-dashed small">
+                <i class="bi bi-scissors"></i> Línea de corte
+            </div>
+        </div>
+
+      </div>
+      <div class="modal-footer border-0 bg-light d-print-none text-center">
+        <button type="button" class="btn btn-secondary w-100 mb-2 py-2" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-success w-100 fw-bold d-flex align-items-center justify-content-center py-2 fs-5" (click)="printTicket()">
+            <i class="bi bi-printer-fill me-2"></i> IMPRIMIR TICKET
+        </button>
       </div>
     </div>
   </div>
