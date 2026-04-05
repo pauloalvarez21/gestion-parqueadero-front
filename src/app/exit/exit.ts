@@ -1,7 +1,8 @@
-import { Component, inject, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, inject, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../environments/environment.development';
 
 interface SalidaRequest {
@@ -33,19 +34,30 @@ interface PagoResponse {
   templateUrl: './exit.html',
   styleUrl: './exit.css',
 })
-export class ExitRegistrationComponent implements AfterViewInit {
+export class ExitRegistrationComponent implements AfterViewInit, OnInit {
   @ViewChild('ticketInput') ticketInput!: ElementRef<HTMLInputElement>;
 
   private http = inject(HttpClient);
   private cdr = inject(ChangeDetectorRef);
+  private route = inject(ActivatedRoute);
 
   request: SalidaRequest = {
+    codigoTicket: '',
     observaciones: ''
   };
 
   payment: PagoResponse | null = null;
   isLoading = false;
   errorMessage = '';
+
+  ngOnInit() {
+    const code = this.route.snapshot.paramMap.get('code');
+    if (code) {
+      this.request.codigoTicket = code;
+      // Si quieres que liquide automáticamente al entrar con el código:
+      // this.registerExit();
+    }
+  }
 
   ngAfterViewInit() {
       this.focusInput();
@@ -89,7 +101,52 @@ export class ExitRegistrationComponent implements AfterViewInit {
   }
 
   printReceipt() {
-    window.print();
+    const printArea = document.getElementById('printableReceipt');
+    if (printArea) {
+      const printWindow = window.open('', '_blank', 'width=400,height=600');
+      if (printWindow) {
+        const content = printArea.outerHTML;
+        printWindow.document.open();
+        printWindow.document.write(`
+          <html>
+            <head>
+              <title>Recibo de Pago</title>
+              <meta charset="utf-8">
+              <base href="${window.location.origin}/">
+              <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+              <style>
+                body { 
+                  background: white; 
+                  padding: 0; 
+                  margin: 0; 
+                  font-family: monospace; 
+                  display: flex;
+                  justify-content: center;
+                }
+                #printableReceipt { 
+                  display: block !important;
+                  width: 80mm; 
+                  margin: 0; 
+                  padding: 5mm; 
+                  color: black !important;
+                  text-align: center;
+                }
+                .d-print-none { display: none !important; }
+                hr { border-color: black !important; border-style: dashed !important; opacity: 1 !important; border-width: 1px 0 0 0 !important; }
+                @media print {
+                  @page { margin: 0; size: auto; }
+                  body { visibility: visible; }
+                }
+              </style>
+            </head>
+            <body onload="setTimeout(function(){ window.print(); window.close(); }, 800)">
+              ${content}
+            </body>
+          </html>
+        `);
+        printWindow.document.close();
+      }
+    }
   }
 
   sendEmail() {

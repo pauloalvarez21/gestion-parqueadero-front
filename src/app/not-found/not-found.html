@@ -1,0 +1,50 @@
+<div class="not-found-container d-flex flex-column align-items-center justify-content-center min-vh-100 text-center p-4">
+  <div class="not-found-card glass-panel p-5 animate-fade-in shadow-2xl">
+    <div class="error-illustration mb-4">
+      <i class="bi bi-geo-alt-fill text-danger display-1 opacity-25"></i>
+      <h1 class="display-1 fw-extrabold text-main mb-0 mt-n5">404</h1>
+    </div>
+    
+    <h2 class="fw-bold mb-3">¡Vaya! Parece que te has perdido</h2>
+    <p class="text-muted fs-5 mb-5 mx-auto" style="max-width: 400px;">
+      La página que buscas no existe o ha sido movida a otro espacio.
+    </p>
+
+    <div class="redirect-info p-3 bg-light rounded-4 border-glass mb-4 animate-pulse">
+      <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+      <span class="fw-bold">Redirigiendo al inicio en {{ countdown }} segundos...</span>
+    </div>
+
+    <button class="btn btn-primary d-flex align-items-center gap-2 px-5 py-3 fw-bold rounded-pill shadow-lg mx-auto" (click)="goToLogin()">
+      <i class="bi bi-house-door-fill"></i> Volver Ahora
+    </button>
+  </div>
+
+  <div class="mt-4 text-muted small opacity-50">
+    &copy; 2026 Gaelectronica S.A.S - Sistema de Gestión de Parqueo
+  </div>
+</div>
+
+<style>
+.not-found-card {
+  max-width: 550px;
+  border-radius: var(--radius-xl, 30px);
+  border-top: 5px solid var(--danger) !important;
+}
+
+.text-main {
+  background: linear-gradient(135deg, #2D3436 0%, #636E72 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .7; }
+}
+</style>

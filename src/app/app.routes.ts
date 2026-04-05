@@ -11,6 +11,7 @@ import { VehiclesComponent } from './vehicles/vehicles';
 import { ExitRegistrationComponent } from './exit/exit';
 import { BillingConfigComponent } from './billing-config/billing-config';
 import { DashboardComponent } from './dashboard/dashboard';
+import { NotFoundErrorComponent } from './not-found/not-found';
 import { authGuard } from './guards/auth.guard';
 import { roleGuard } from './guards/role.guard';
 
@@ -42,6 +43,12 @@ export const routes: Routes = [
   },
   {
     path: 'exit',
+    component: ExitRegistrationComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { allowedRoles: ['ADMIN', 'OPERADOR'] },
+  },
+  {
+    path: 'exit/:code',
     component: ExitRegistrationComponent,
     canActivate: [authGuard, roleGuard],
     data: { allowedRoles: ['ADMIN', 'OPERADOR'] },
@@ -83,4 +90,5 @@ export const routes: Routes = [
     data: { allowedRoles: ['ADMIN'] },
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '**', component: NotFoundErrorComponent }
 ];
